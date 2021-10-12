@@ -23,11 +23,11 @@ The name of the user arrive after the initialization of the `local_video`, which
 
 ![image](https://user-images.githubusercontent.com/61381909/136927884-ba680a42-7271-4e48-bce9-981573dfcf7f.png)
 
-Inside the folder `data`, a folder with the name of the user will be created.
+After the user name is got by the server, a folder with the name of the user will be created inside the folder `data`.
 
 ![image](https://user-images.githubusercontent.com/61381909/136929405-460a2f18-a1c4-4277-bd57-e025a9fb6ddb.png)
 
-The server will save the frame into files.
+And the server will save the frame into files.
 
 ![image](https://user-images.githubusercontent.com/61381909/136929580-e1082493-f81f-46d7-bdd5-b5c2183f5ab2.png)
 
