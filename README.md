@@ -17,7 +17,7 @@ This page is mainly from the sample code, I just delete some unnessary parts
 ![image](https://user-images.githubusercontent.com/61381909/136927795-ccfa1484-4f07-4074-ad39-59d6712862ad.png)
 
 
-When the user click start, the browser will start to create a peer connection with the server, then create a data channel and access the camera. The data channel will first send the name of the user will the channel is created, and the video track of the camera will be sent to the server through a track.
+When the user click start, the browser will start to create a peer connection with the server, then create a data channel and access the camera. The data channel will first send the name of the user immediately after the channel is created, and the video track of the camera will be sent to the server through a track.
 
 The name of the user arrive after the initialization of the local_video, which is a class of `VideoTransformTrack`. If the user name has not been set, the server will turn the received frame to gray and return to the browser, otherwise it will return the original received frame to the browser. The frame returned from the server will be shown under `Media`.
 
