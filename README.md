@@ -1,7 +1,8 @@
 # WebGUI
 
 ## Build
-Maybe need to use Visual Studio Installer to install C++ build tools first (a few GBs)
+Maybe need to use Visual Studio Installer to install C++ build tools first (a few GBs).
+
 Inside Anaconda or just the system environment
 ```
 python -m pip install -r requirements.txt
