@@ -4,6 +4,18 @@ var dataChannelLog = document.getElementById('data-channel'),
     iceGatheringLog = document.getElementById('ice-gathering-state'),
     signalingLog = document.getElementById('signaling-state');
 
+// get the name of the user
+let userName = null
+while (true) {
+    userName = prompt("Please enter your name", 'Jack')
+    if (userName === null) {
+        alert("You must input your name")
+    } else {
+        break;
+    }
+}
+
+
 // peer connection
 var pc = null;
 
@@ -89,15 +101,52 @@ function start() {
 
     pc = createPeerConnection();
 
-    var ws = new WebSocket("ws://127.0.0.1:5678/"),
-                        messages = document.createElement('ul');
-    ws.onmessage = function (event) {
-            message = document.createElement('li'),
-            content = document.createTextNode(event.data);
-        message.appendChild(content);
-        messages.appendChild(message);
+    // create data channel
+    var time_start = null;
+    function current_stamp() {
+        if (time_start === null) {
+            time_start = new Date().getTime();
+            return 0;
+        } else {
+            return new Date().getTime() - time_start;
+        }
+    }
+    var parameters = {"ordered": true};
+
+    dc = pc.createDataChannel('chat', parameters);
+    dc.onclose = function() {
+        // clearInterval(dcInterval);
+        dataChannelLog.textContent += '- close\n';
     };
-    document.getElementById('data-channel').appendChild(messages);
+    dc.onopen = function() {
+        dataChannelLog.textContent += '- open\n';
+        // dcInterval = setInterval(function() {
+            // var message = userName + current_stamp();
+            var message = "User " + userName;
+            console.log(message)
+            dataChannelLog.textContent += '> ' + message + '\n';
+            dc.send(message);
+        // }, 1000);
+    };
+    dc.onmessage = function(evt) {
+        dataChannelLog.textContent += '< ' + evt.data + '\n';
+
+        if (evt.data.substring(0, 7) === 'Passed ') {
+            var passed = evt.data.substring(7) === 'True';
+            dataChannelLog.textContent += 'Received: ' + passed + ' \n';
+        }
+    };
+
+    // create websocket connection
+    // var ws = new WebSocket("ws://127.0.0.1:5678/"),
+    //                     messages = document.createElement('ul');
+    // ws.onmessage = function (event) {
+    //         message = document.createElement('li'),
+    //         content = document.createTextNode(event.data);
+    //     message.appendChild(content);
+    //     messages.appendChild(message);
+    // };
+    // document.getElementById('data-channel').appendChild(messages);
 
     var constraints = {
         // audio: document.getElementById('use-audio').checked,

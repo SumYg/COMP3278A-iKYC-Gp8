@@ -28,27 +28,40 @@ class VideoTransformTrack(MediaStreamTrack):
 
     kind = "video"
 
-    def __init__(self, track, transform, passed):
+    def __init__(self, track, transform, passed, user_name):
         super().__init__()  # don't forget this!
         self.track = track
         self.transform = transform
         # self.counter = 0
         self.passed = passed
-        self.user_name = "Jack"
-        if not os.path.exists('data/{}'.format(self.user_name)):
+        self.user_ref = user_name
+        self.user_name = user_name[0]
+        if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
             os.mkdir('data/{}'.format(self.user_name))
         self.cnt = 1
         
 
     async def recv(self):
         frame = await self.track.recv()
+        if self.user_name == None:
+            img = frame.to_ndarray(format='bgr24')
+            gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+            # print(self.user_ref)
+            self.user_name = self.user_ref[0]
+            new_frame = VideoFrame.from_ndarray(cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB), format="bgr24")
+            new_frame.pts = frame.pts
+            new_frame.time_base = frame.time_base
+            if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
+                os.mkdir('data/{}'.format(self.user_name))
+            return new_frame
         if self.cnt <= NUM_IMGS:
             # await stop_this_connection(self.pc)
             # await self.track.stop()
             # return
             # print(type(frame))
-            gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
-            cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), frame.to_ndarray(format='bgr24'))
+            # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
+            img = frame.to_ndarray(format='bgr24')
+            cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
             self.cnt += 1
             # self.passed.append(None)
         return frame
@@ -129,6 +142,7 @@ async def javascript(request):
 
 async def offer(request):
     passed = []
+    user_name = [None]
     params = await request.json()
     offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"])
 
@@ -152,9 +166,13 @@ async def offer(request):
     def on_datachannel(channel):
         @channel.on("message")
         def on_message(message):
-            if isinstance(message, str) and message.startswith("ping"):
-                channel.send("pong" + message[4:])
-                channel.send("Passed "+ str(len(passed) > 0))
+            if isinstance(message, str):
+                if message.startswith("User "):
+                    username = message[5:]
+                    user_name[0] = username
+                    channel.send("You are " + username)
+                    channel.send("Passed "+ str(len(passed) > 0))
+
 
     @pc.on("iceconnectionstatechange")
     async def on_iceconnectionstatechange():
@@ -173,7 +191,7 @@ async def offer(request):
         if track.kind == "video":
             print("\nPreparing to cap picture from video\n")
             local_video = VideoTransformTrack(
-                track, params["video_transform"], passed
+                track, params["video_transform"], passed, user_name
             )
             pc.addTrack(local_video)
 
