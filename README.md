@@ -27,7 +27,7 @@ After the user name is got by the server, a folder with the name of the user wil
 
 ![image](https://user-images.githubusercontent.com/61381909/136929405-460a2f18-a1c4-4277-bd57-e025a9fb6ddb.png)
 
-And the server will save the frame into files.
+And the server will save the frame into files in the user's folder.
 
 ![image](https://user-images.githubusercontent.com/61381909/136929580-e1082493-f81f-46d7-bdd5-b5c2183f5ab2.png)
 
