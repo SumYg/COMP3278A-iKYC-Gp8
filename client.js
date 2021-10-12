@@ -102,15 +102,6 @@ function start() {
     pc = createPeerConnection();
 
     // create data channel
-    var time_start = null;
-    function current_stamp() {
-        if (time_start === null) {
-            time_start = new Date().getTime();
-            return 0;
-        } else {
-            return new Date().getTime() - time_start;
-        }
-    }
     var parameters = {"ordered": true};
 
     dc = pc.createDataChannel('chat', parameters);
