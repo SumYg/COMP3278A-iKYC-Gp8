@@ -6,6 +6,8 @@ import os
 import ssl
 import uuid
 
+from time import time
+
 import cv2
 from aiohttp import web
 from av import VideoFrame
@@ -20,7 +22,7 @@ ROOT = os.path.dirname(__file__)
 logger = logging.getLogger("pc")
 pcs = set()
 
-NUM_IMGS = 100
+NUM_IMGS = 66
 class VideoTransformTrack(MediaStreamTrack):
     """
     A video stream track that transforms frames from an another track.
@@ -28,14 +30,14 @@ class VideoTransformTrack(MediaStreamTrack):
 
     kind = "video"
 
-    def __init__(self, track, transform, passed, user_name):
+    def __init__(self, track, passed, user_name):
         super().__init__()  # don't forget this!
         self.track = track
-        self.transform = transform
         # self.counter = 0
         self.passed = passed
         self.user_ref = user_name
         self.user_name = user_name[0]
+        self.time = time()
         if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
             os.mkdir('data/{}'.format(self.user_name))
         self.cnt = 1
@@ -44,27 +46,33 @@ class VideoTransformTrack(MediaStreamTrack):
     async def recv(self):
         frame = await self.track.recv()
         if self.user_name == None:
-            img = frame.to_ndarray(format='bgr24')
-            gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+            # img = frame.to_ndarray(format='bgr24')
+            # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
             # print(self.user_ref)
             self.user_name = self.user_ref[0]
-            new_frame = VideoFrame.from_ndarray(cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB), format="bgr24")
-            new_frame.pts = frame.pts
-            new_frame.time_base = frame.time_base
+            # new_frame = VideoFrame.from_ndarray(cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB), format="bgr24")
+            # new_frame.pts = frame.pts
+            # new_frame.time_base = frame.time_base
             if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
                 os.mkdir('data/{}'.format(self.user_name))
-            return new_frame
+            # return new_frame
         if self.cnt <= NUM_IMGS:
             # await stop_this_connection(self.pc)
             # await self.track.stop()
             # return
             # print(type(frame))
             # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
-            img = frame.to_ndarray(format='bgr24')
-            cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
-            self.cnt += 1
-            # self.passed.append(None)
-        return frame 
+            ctime = time()
+            if self.time + 1 < ctime:
+                self.time = ctime
+                print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
+                img = frame.to_ndarray(format='yuv420p')
+                cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
+                self.cnt += 1
+        elif len(self.passed) == 0:
+            print("Change State")
+            self.passed.append(None)
+        return frame
 
 
 async def index(request):
@@ -112,13 +120,26 @@ async def offer(request):
     @pc.on("datachannel")
     def on_datachannel(channel):
         @channel.on("message")
-        def on_message(message):
+        async def on_message(message):
             if isinstance(message, str):
                 if message.startswith("User "):
+                    print('===')
                     username = message[5:]
                     user_name[0] = username
                     channel.send("You are " + username)
                     channel.send("Passed "+ str(len(passed) > 0))
+                elif message.startswith("check"):
+                    isPass = len(passed) > 0
+                    print('[][]', isPass, passed)
+                    while isPass != True:
+                        await asyncio.sleep(3)
+                        isPass = len(passed) > 0
+                        print(isPass)
+                    channel.send("Passed "+ str(isPass))
+                else:
+                    print("R", message)
+                
+
 
 
     @pc.on("iceconnectionstatechange")
@@ -138,7 +159,7 @@ async def offer(request):
         if track.kind == "video":
             print("\nPreparing to cap picture from video\n")
             local_video = VideoTransformTrack(
-                track, params["video_transform"], passed, user_name
+                track, passed, user_name
             )
             pc.addTrack(local_video)
 
@@ -205,7 +226,7 @@ if __name__ == "__main__":
 
     app = web.Application()
     app.on_shutdown.append(on_shutdown)
-    ws_serve()
+    # ws_serve()
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
     app.router.add_post("/offer", offer)
