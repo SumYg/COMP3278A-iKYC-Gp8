@@ -73,13 +73,13 @@ function negotiate() {
         });
     }).then(function() {
         var offer = pc.localDescription;
-
+        // codec = 'VP8/90000'
+        // offer.sdp = sdpFilterCodec('video', codec, offer.sdp);
         document.getElementById('offer-sdp').textContent = offer.sdp;
         return fetch('/offer', {
             body: JSON.stringify({
                 sdp: offer.sdp,
-                type: offer.type,
-                video_transform: document.getElementById('video-transform').value
+                type: offer.type
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -125,6 +125,11 @@ function start() {
         if (evt.data.substring(0, 7) === 'Passed ') {
             var passed = evt.data.substring(7) === 'True';
             dataChannelLog.textContent += 'Received: ' + passed + ' \n';
+            if (!passed) {
+                dc.send("check");
+            } else {
+                stop();
+            }
         }
     };
 
@@ -141,7 +146,12 @@ function start() {
 
     var constraints = {
         // audio: document.getElementById('use-audio').checked,
-        video: true
+        audio: false,
+        video: {
+            width: { ideal: 1280 },
+            height: { ideal: 1080 },
+            
+        } 
     };
 
     // if (document.getElementById('use-video').checked) {
@@ -160,7 +170,9 @@ function start() {
     if (constraints.video) {
         document.getElementById('media').style.display = 'block';
     }
+    var displayV = document.getElementById('video11')
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        displayV.srcObject = stream;
         stream.getTracks().forEach(function(track) {
             pc.addTrack(track, stream);
         });
