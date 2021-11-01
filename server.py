@@ -16,6 +16,7 @@ from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
 from socket_server import ws_serve
+from FaceRecognition.train import train_model
 
 ROOT = os.path.dirname(__file__)
 
@@ -45,6 +46,9 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
+        # frame = VideoFrame(width=1280, height=720)
+
+        # frame = VideoFrame(width=1280, height=720)
         if self.user_name == None:
             # img = frame.to_ndarray(format='bgr24')
             # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
@@ -62,13 +66,14 @@ class VideoTransformTrack(MediaStreamTrack):
             # return
             # print(type(frame))
             # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
-            ctime = time()
-            if self.time + 1 < ctime:
-                self.time = ctime
-                print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
-                img = frame.to_ndarray(format='yuv420p')
-                cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
-                self.cnt += 1
+            # ctime = time()
+            # if self.time + 1 < ctime:
+            # self.time = ctime
+            print(frame)
+            print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
+            img = frame.to_ndarray(format='bgr24')
+            cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
+            self.cnt += 1
         elif len(self.passed) == 0:
             print("Change State")
             self.passed.append(None)
@@ -115,7 +120,7 @@ async def offer(request):
     if args.write_audio:
         recorder = MediaRecorder(args.write_audio)
     else:
-        recorder = MediaBlackhole()
+        recorder = MediaBlackhole()  # 'what.mp4', options={'width': 1280, 'height':720}
 
     @pc.on("datachannel")
     def on_datachannel(channel):
@@ -136,6 +141,8 @@ async def offer(request):
                         isPass = len(passed) > 0
                         print(isPass)
                     channel.send("Passed "+ str(isPass))
+                elif message.startswith('train?'):
+                    await train_model()
                 else:
                     print("R", message)
                 
