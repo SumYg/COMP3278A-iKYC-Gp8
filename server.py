@@ -16,7 +16,7 @@ from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
 from socket_server import ws_serve
-from FaceRecognition.train import train_model
+from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
 
 ROOT = os.path.dirname(__file__)
 
@@ -24,23 +24,29 @@ logger = logging.getLogger("pc")
 pcs = set()
 
 NUM_IMGS = 66
+PATH_FACES = 'FaceRecognition\data/'
+
 class VideoTransformTrack(MediaStreamTrack):
     """
     A video stream track that transforms frames from an another track.
     """
 
     kind = "video"
+    CONFIDENCE_LEVEL = 60
 
-    def __init__(self, track, passed, user_name):
+    def __init__(self, track, passed, user_name, is_register):
         super().__init__()  # don't forget this!
         self.track = track
         # self.counter = 0
+        self.is_register = is_register
+        if not is_register:
+            initialize_face_recogn()
         self.passed = passed
         self.user_ref = user_name
         self.user_name = user_name[0]
         self.time = time()
-        if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
-            os.mkdir('data/{}'.format(self.user_name))
+        if self.user_name != None and not os.path.exists(PATH_FACES + self.user_name):
+            os.mkdir(PATH_FACES + self.user_name)
         self.cnt = 1
         
 
@@ -57,26 +63,35 @@ class VideoTransformTrack(MediaStreamTrack):
             # new_frame = VideoFrame.from_ndarray(cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB), format="bgr24")
             # new_frame.pts = frame.pts
             # new_frame.time_base = frame.time_base
-            if self.user_name != None and not os.path.exists('data/{}'.format(self.user_name)):
-                os.mkdir('data/{}'.format(self.user_name))
+            if self.user_name != None and not os.path.exists(PATH_FACES + self.user_name):
+                os.mkdir(PATH_FACES + self.user_name)
             # return new_frame
-        if self.cnt <= NUM_IMGS:
-            # await stop_this_connection(self.pc)
-            # await self.track.stop()
-            # return
-            # print(type(frame))
-            # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
-            # ctime = time()
-            # if self.time + 1 < ctime:
-            # self.time = ctime
-            print(frame)
-            print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
-            img = frame.to_ndarray(format='bgr24')
-            cv2.imwrite("data/{}/{}{:03d}.jpg".format(self.user_name, self.user_name, self.cnt), img)
-            self.cnt += 1
-        elif len(self.passed) == 0:
-            print("Change State")
-            self.passed.append(None)
+        img = frame.to_ndarray(format='bgr24')
+        if self.is_register:
+            if self.cnt <= NUM_IMGS:
+                # await stop_this_connection(self.pc)
+                # await self.track.stop()
+                # return
+                # print(type(frame))
+                # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
+                # ctime = time()
+                # if self.time + 1 < ctime:
+                # self.time = ctime
+                print(frame)
+                print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
+                cv2.imwrite("{}{}/{}{:03d}.jpg".format(PATH_FACES, self.user_name, self.user_name, self.cnt), img)
+                self.cnt += 1
+            elif len(self.passed) == 0:
+                print("Change State")
+                self.passed.append(None)
+        else:
+            new_frame = await recorgn_face(img)
+            # new_frame = cv2.cvtColor(new_frame, cv2.COLOR_GRAY2RGB)
+            new_frame = VideoFrame.from_ndarray(new_frame, format="bgr24")
+            new_frame.pts = frame.pts
+            new_frame.time_base = frame.time_base
+            frame = new_frame
+
         return frame
 
 
@@ -100,7 +115,11 @@ async def javascript(request):
 #     # transeiver.send()
 #     return
 
-async def offer(request):
+async def register(request):  return await offer(request, True)
+
+async def login(request):  return await offer(request, False)
+
+async def offer(request, is_register):
     passed = []
     user_name = [None]
     params = await request.json()
@@ -145,9 +164,6 @@ async def offer(request):
                     await train_model()
                 else:
                     print("R", message)
-                
-
-
 
     @pc.on("iceconnectionstatechange")
     async def on_iceconnectionstatechange():
@@ -166,7 +182,7 @@ async def offer(request):
         if track.kind == "video":
             print("\nPreparing to cap picture from video\n")
             local_video = VideoTransformTrack(
-                track, passed, user_name
+                track, passed, user_name, is_register
             )
             pc.addTrack(local_video)
 
@@ -198,7 +214,6 @@ async def offer(request):
             {"sdp": pc.localDescription.sdp, "type": pc.localDescription.type}
         ),
     )
-
 
 async def on_shutdown(app):
     # close peer connections
@@ -236,5 +251,7 @@ if __name__ == "__main__":
     # ws_serve()
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
-    app.router.add_post("/offer", offer)
+    # app.router.add_post("/offer", offer)
+    app.router.add_post("/register", register)
+    app.router.add_post("/login", login)
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
