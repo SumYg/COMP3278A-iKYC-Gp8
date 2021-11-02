@@ -76,7 +76,8 @@ function negotiate() {
         // codec = 'VP8/90000'
         // offer.sdp = sdpFilterCodec('video', codec, offer.sdp);
         document.getElementById('offer-sdp').textContent = offer.sdp;
-        return fetch('/offer', {
+        return fetch('/register', {
+        // return fetch('/login', {
             body: JSON.stringify({
                 sdp: offer.sdp,
                 type: offer.type
@@ -129,6 +130,7 @@ function start() {
                 dc.send("check");
             } else {
                 stop();
+                dc.send('train?');
             }
         }
     };
@@ -147,11 +149,7 @@ function start() {
     var constraints = {
         // audio: document.getElementById('use-audio').checked,
         audio: false,
-        video: {
-            width: { ideal: 1280 },
-            height: { ideal: 1080 },
-            
-        } 
+        video: true
     };
 
     // if (document.getElementById('use-video').checked) {
