@@ -1,7 +1,10 @@
 # WebGUI
 
 ## Build
-Maybe need to use Visual Studio Installer to install C++ build tools first (a few GBs).
+### WSL
+Should be more easy to install in WSL.
+
+### Windows
 
 Inside Anaconda or just the system environment
 ```
