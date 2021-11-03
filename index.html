@@ -1,91 +1,86 @@
-<html>
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebRTC demo</title>
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <title>DB App</title>
+    
     <style>
-    button {
-        padding: 8px 16px;
-    }
+    body {
+        margin: 0;
+        /* margin-bottom: 3em; */
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
-    pre {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
+      }
+      
+      button {
+        padding: 7px 17px;
+        background-color: rgb(61,151,227);
+        color: whitesmoke;
+        border-radius: 15px;
+        margin-bottom: 1em;
+      }
+      
+      label {
+        width: 6em;
+        float: left;
+      }
+      
+      #root {
+        height: calc(100vh - 70px);
+        z-index: -1;
+        
+      }
+      
+      #login-page, #home-page, #doc-invalid, #newdoc-page, #register-page {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        
+        margin-left: 20px;
+        margin-right: 20px;
+        
+      }
 
-    video {
+      #home-page a {
         width: 100%;
-    }
-
-    .option {
-        margin-bottom: 8px;
-    }
-
-    #media {
-        max-width: 1280px;
-    }
-    </style>
-</head>
-<body>
-
-<h2>Options</h2>
-<div class="option">
-    <label for="use-video">Use video</label>
-    <select id="video-resolution">
-        <option value="" selected>Default resolution</option>
-        <!-- <option value="320x240">320x240</option>
-        <option value="640x480">640x480</option>
-        <option value="960x540">960x540</option>
-        <option value="1280x720">1280x720</option> -->
-    </select>
-    <select id="video-transform">
-        <option value="none" selected>No transform</option>
-        <!-- <option value="edges">Edge detection</option>
-        <option value="cartoon">Cartoon effect</option>
-        <option value="rotate">Rotate</option> -->
-    </select>
-    <select id="video-codec">
-        <option value="default" selected>Default codecs</option>
-        <!-- <option value="VP8/90000">VP8</option>
-        <option value="H264/90000">H264</option> -->
-    </select>
-</div>
-
-<button id="start" onclick="start()">Start</button>
-<button id="stop" style="display: none" onclick="stop()">Stop</button>
-
-<h2>State</h2>
-<p>
-    ICE gathering state: <span id="ice-gathering-state"></span>
-</p>
-<p>
-    ICE connection state: <span id="ice-connection-state"></span>
-</p>
-<p>
-    Signaling state: <span id="signaling-state"></span>
-</p>
-
-
-<!-- <h2>Web Socket (Randomly send from server to client)</h2> -->
-<h2>Data channel</h2>
-<pre id="data-channel" style="height: 200px;"></pre>
-
-<div id="media" style="display: none">
-    <h2>Media</h2>
-
-    <audio id="audio" autoplay="true"></audio>
-    <video id="video" autoplay="true" playsinline="true"></video>
-</div>
-
-
-<h2>SDP</h2>
-
-<h3>Offer</h3>
-<pre id="offer-sdp"></pre>
-
-<h3>Answer</h3>
-<pre id="answer-sdp"></pre>
-
-<script src="client.js"></script>
+        word-wrap: break-word;
+      
+      }
+      #register-button{
+          display: inline-block;
+          margin-left: 10px;
+      }
+      #login-page{
+          justify-content: center;
+      }
+      #login-page{
+          height: calc(100% - 70px);
+          margin-left: 500px;
+          margin-right: 500px;
+          margin-top: 70px;
+          background-color: rgba(255, 140, 0, 0.459);
+          border-radius: 50px;
+          border-color: rgba(255, 140, 0, 0.267);
+          border-width: 5px;
+          border-style: dotted;
+      }
+      
+      </style>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div id="login-page">
+        <h1 id="welcome">Welcome, Please Login</h1><div id="LoginANDRegister">
+        <form id="loginForm"><p><label for="account">Account:</label><input type="text" id="account"></p><p><label for="password">Password:</label> <input type="password" id="password"></p>
+            <button id="pw_login">Login with password</button></form><button id="face_login">Login with FaceID</button><button id="register-button">Register</button>
+            <button id="record_face" style="display: none;">Register your face</button>
+            <video width="320" height="240" id="video" autoplay="true" playsinline="true" style="display: none;"></video>
+        </div>
+      </div>
+    </div>
+  
 </body>
+<script type="module" src="index.js"></script>
 </html>
