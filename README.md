@@ -6,7 +6,7 @@ Should be more easy to install in WSL.
 
 ### Windows
 
-Inside Anaconda or just the system environment
+Inside Anaconda or just the system environment with Visual Studio.
 ```
 python -m pip install -r requirements.txt
 ```
