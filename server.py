@@ -24,7 +24,7 @@ logger = logging.getLogger("pc")
 pcs = set()
 
 NUM_IMGS = 66
-PATH_FACES = 'FaceRecognition\data/'
+PATH_FACES = 'FaceRecognition/data/'
 
 class VideoTransformTrack(MediaStreamTrack):
     """
@@ -32,7 +32,6 @@ class VideoTransformTrack(MediaStreamTrack):
     """
 
     kind = "video"
-    CONFIDENCE_LEVEL = 60
 
     def __init__(self, track, passed, user_name, is_register):
         super().__init__()  # don't forget this!
@@ -48,7 +47,6 @@ class VideoTransformTrack(MediaStreamTrack):
         if self.user_name != None and not os.path.exists(PATH_FACES + self.user_name):
             os.mkdir(PATH_FACES + self.user_name)
         self.cnt = 1
-        
 
     async def recv(self):
         frame = await self.track.recv()
@@ -99,9 +97,14 @@ async def index(request):
     content = open(os.path.join(ROOT, "index.html"), "r").read()
     return web.Response(content_type="text/html", text=content)
 
+async def indexjs(request):
+    return await javascript(request, 'index.js')
 
-async def javascript(request):
-    content = open(os.path.join(ROOT, "client.js"), "r").read()
+async def rtcjs(request):
+    return await javascript(request, 'RTCserver_connection.js')
+    
+async def javascript(request, file):
+    content = open(os.path.join(ROOT, file), "r").read()
     return web.Response(content_type="application/javascript", text=content)
 
 # async def stop_this_connection(pc):
@@ -250,7 +253,8 @@ if __name__ == "__main__":
     app.on_shutdown.append(on_shutdown)
     # ws_serve()
     app.router.add_get("/", index)
-    app.router.add_get("/client.js", javascript)
+    app.router.add_get("/index.js", indexjs)
+    app.router.add_get("/RTCserver_connection.js", rtcjs)
     # app.router.add_post("/offer", offer)
     app.router.add_post("/register", register)
     app.router.add_post("/login", login)
