@@ -9,6 +9,7 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 face_cascade = cv2.CascadeClassifier(os.path.join(BASE_DIR, 'haarcascade/haarcascade_frontalface_default.xml'))
 labels = None
+CONFIDENCE_LEVEL = 80
 
 def initialize_face_recogn():
     global labels
@@ -27,20 +28,20 @@ async def recorgn_face(frame):
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=3)
 
     for (x, y, w, h) in faces:
-        print(x, w, y, h)
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = frame[y:y + h, x:x + w]
         # predict the id and confidence for faces
         id_, conf = recognizer.predict(roi_gray)
 
         # 3.1 If the face is recognized
-        if conf >= 60:
+        if conf >= CONFIDENCE_LEVEL:
             # print(id_)
             # print(labels[id_])
             font = cv2.QT_FONT_NORMAL
             id = 0
             id += 1
             name = labels[id_]
+            print(name, x, w, y, h)
             current_name = name
             color = (255, 0, 0)
             stroke = 2
@@ -139,7 +140,5 @@ async def train_model():
     # Train the recognizer and save the trained model.
     recognizer.train(x_train, np.array(y_label))
     recognizer.save("train.yml")
-    print("Trained")
-    print("Trained")
     print("Trained")
     print("Trained")
