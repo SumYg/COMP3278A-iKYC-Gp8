@@ -16,10 +16,10 @@ Then open http://localhost:8080 in browser
 ## Features
 - [x] Login Page
 - [ ] Show camera video when using face id to login
-- [ ] Redirect to Home Page after the face of the user is recorgnised
+- [ ] Redirect/ Change to Home Page after the face of the user is recorgnised
 - [x] Register Page
 - [x] Turn off camera after capturing enough photos to train model in the server
-- [ ] Redirect to the Home Page after the model is trained
+- [ ] Redirect/ Change to the Home Page after the model is trained
 - [ ] Home Page
 
 ## Some Screenshots and Explanations
