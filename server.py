@@ -24,6 +24,7 @@ pcs = set()
 
 NUM_IMGS = 66
 PATH_FACES = 'FaceRecognition/data/'
+os.makedirs(PATH_FACES, exist_ok=True)
 
 class VideoTransformTrack(MediaStreamTrack):
     """
