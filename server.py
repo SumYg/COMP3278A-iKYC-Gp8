@@ -97,6 +97,10 @@ async def index(request):
     content = open(os.path.join(ROOT, "index.html"), "r").read()
     return web.Response(content_type="text/html", text=content)
 
+async def logo(request):
+    # content = open(os.path.join(ROOT, "logo.png"), "r").read()
+    return web.FileResponse('./logo.png')
+
 async def indexjs(request):
     return await javascript(request, 'index.js')
 
@@ -253,6 +257,7 @@ if __name__ == "__main__":
     app.on_shutdown.append(on_shutdown)
     # ws_serve()
     app.router.add_get("/", index)
+    app.router.add_get("/logo.png", logo)
     app.router.add_get("/index.js", indexjs)
     app.router.add_get("/RTCserver_connection.js", rtcjs)
     # app.router.add_post("/offer", offer)
