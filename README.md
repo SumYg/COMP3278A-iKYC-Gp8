@@ -19,6 +19,7 @@ Then open http://localhost:8080 in browser
 - [ ] Redirect/Change to Home Page after the face of the user is recorgnised
 - [x] Register Page
 - [x] Turn off camera after capturing enough photos to train model in the server
+- [ ] Check for the existence of username and insert new user into the DB
 - [ ] Redirect/Change to the Home Page after the model is trained
 - [ ] Home Page
 
