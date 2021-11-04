@@ -17,6 +17,4 @@ def selection(request):
     print(result)
     data = "error"
     res = dict()
-    for r in result:
-        res[]
     return web.json_response(res)
