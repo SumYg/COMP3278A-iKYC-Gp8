@@ -15,7 +15,6 @@ from av import VideoFrame
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
-from socket_server import ws_serve
 from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
 
 ROOT = os.path.dirname(__file__)
