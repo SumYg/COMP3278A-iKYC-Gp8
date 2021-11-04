@@ -49,10 +49,10 @@ async def recorgn_face(frame):
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), (2))
 
             # # Find the customer's information in the database.
-            # select = "SELECT customer_id, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Customer WHERE name='%s'" % (name)
-            # name = cursor.execute(select)
-            # result = cursor.fetchall()
-            # # print(result)
+            select = "SELECT customer_id, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Customer WHERE name='%s'" % (name)
+            name = cursor.execute(select)
+            result = cursor.fetchall()
+            print(result)
             # data = "error"
 
             # for x in result:
@@ -140,5 +140,7 @@ async def train_model():
     # Train the recognizer and save the trained model.
     recognizer.train(x_train, np.array(y_label))
     recognizer.save("train.yml")
+    print("Trained")
+    print("Trained")
     print("Trained")
     print("Trained")
