@@ -14,6 +14,7 @@ from av import VideoFrame
 
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
+import sqlconnector
 
 from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
 
@@ -263,4 +264,8 @@ if __name__ == "__main__":
     # app.router.add_post("/offer", offer)
     app.router.add_post("/register", register)
     app.router.add_post("/login", login)
+    app.router.add_get("/test", sqlconnector.selection)
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
+
+
+
