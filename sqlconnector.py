@@ -1,5 +1,6 @@
 import mysql.connector
 import datetime
+from aiohttp import web
 
 
 myconn = mysql.connector.connect(host="sophia.cs.hku.hk", user="h3566726", passwd="844328", database="h3566726")
@@ -15,3 +16,7 @@ def selection(request):
     result = cursor.fetchall()
     print(result)
     data = "error"
+    res = dict()
+    for r in result:
+        res[]
+    return web.json_response(res)
