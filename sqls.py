@@ -44,16 +44,37 @@ def countAcount():
     return result
     
 def createAccount(username):
-    query = "INSERT INTO Account VALUES(%s, %s)"
     accNo = str(countAcount()+1).zfill(8)
-    val = (accNo, username)
-    mycursor.execute(query, val)
+    query = f"INSERT INTO Account VALUES('{accNo}', '{username}')"
+    mycursor.execute(query)
+    mydb.commit()
+    return accNo
+
+def createSavingAccount(username, current, amount):
+    accNo = createAccount(username)
+    query = f"INSERT INTO Saving VALUES('{accNo}', '{current}', {amount})"
+    mycursor.execute(query)
+    mydb.commit()
+
+def createInvestAccount(username, amount):
+    accNo = createAccount(username)
+    query = f"INSERT INTO Investment VALUES('{accNo}', {amount})"
+    mycursor.execute(query)
+    mydb.commit()
+
+def createCreditAccount(username, available, remaining):
+    accNo = createAccount(username)
+    query = f"INSERT INTO Credit VALUES('{accNo}', '{available}', '{remaining}')"
+    mycursor.execute(query)
     mydb.commit()
     
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
-createAccount("edmund")
+#createAccount("edmund")
 #checkDuplicateUser("j")
 #countAcount()
+#createSavingAccount("edmund", "HKD", 0)
+#createInvestAccount("edmund", 0)
+#createCreditAccount("edmund", 10000, 10000)
 
