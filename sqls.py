@@ -11,42 +11,49 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 def checkDuplicateUser(username):
-    sql = f'SELECT username FROM Customer WHERE username LIKE \'{username}\''
-    mycursor.execute(sql)
+    query = f"SELECT username FROM Customer WHERE username = '{username}'"
+    mycursor.execute(query)
     result = len(mycursor.fetchall())
     return result
     
 def register(username, password):
-    sql = "INSERT INTO Customer (username, password) VALUES (%s, %s)"
-    val = (username, password)
-    mycursor.execute(sql, val)
+    query = f"INSERT INTO Customer (username, password) VALUES ('{username}', '{password}')"
+    mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "record inserted.")
 
 def insertLoginHistory(username):
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    sql_cmd = "INSERT INTO Login_History VALUES(%s, %s)"
-    val = (current_time, username)
-    mycursor.execute(sql_cmd, val)
+    query = f"INSERT INTO Login_History VALUES('{current_time}', '{username}')"
+    mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "record inserted.")
 
 def changePassword(username, newPw):
-    sql_cmd = "UPDATE Customer SET password = %s WHERE username = %s"
+    query = "UPDATE Customer SET password = %s WHERE username = %s"
     val = (newPw, username)
-    mycursor.execute(sql_cmd, val)
+    mycursor.execute(query, val)
     mydb.commit()
     print(mycursor.rowcount, "record changed.")
+
+def countAcount():
+    query = f"SELECT COUNT(*) FROM Account"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    #print(result)
+    return result
     
 def createAccount(username):
-    sql_cmd = "INSERT INTO Account VALUES(%s, %s)"
-    accNo = "00000001"
+    query = "INSERT INTO Account VALUES(%s, %s)"
+    accNo = str(countAcount()+1).zfill(8)
     val = (accNo, username)
-    mycursor.execute(sql_cmd, val)
+    mycursor.execute(query, val)
     mydb.commit()
-#register('essdssmund',"111")
+    
+#register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
-#createAccount("edmund")
-checkDuplicateUser("edmund")
+createAccount("edmund")
+#checkDuplicateUser("j")
+#countAcount()
 
