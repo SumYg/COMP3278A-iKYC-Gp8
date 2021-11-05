@@ -16,14 +16,13 @@ def send_sql_to_server(query):
     myconn.commit()
     return result
 
-
 # Find the customer information in the database.
 def selection(request):
-    select = "SELECT * FROM Customer WHERE username='edmund'"
+    select = "SELECT * FROM Customer"
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(current_time)
-    # sql_cmd = f"INSERT INTO Customer (username, password) VALUES ('aaaaaa', '123')"
-    sql_cmd = f"INSERT INTO Login_History VALUES ('{current_time}', 'edmund')"
+    # sql_cmd = f"INSERT INTO `Customer` (`username`, `password`) VALUES ('aaaaaa', '123')"
+    sql_cmd = f"INSERT INTO `Login_History` VALUES ('{current_time}', 'edmund')"
     print(send_sql_to_server(sql_cmd))
     name = cursor.execute(select)
     result = cursor.fetchall()
@@ -31,5 +30,5 @@ def selection(request):
     data = "error"
     res = dict()
     for i, r in enumerate(result):
-        res[1] = r
+        res[i] = r
     return web.json_response(res)
