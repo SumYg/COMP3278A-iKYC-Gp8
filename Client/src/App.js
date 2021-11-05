@@ -7,6 +7,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.test = this.test.bind(this)
+    this.checkUser = this.checkUser.bind(this)
     this.state = {
       pageState: 'login'
     }
@@ -35,12 +36,28 @@ class App extends React.Component {
       }
     })
   }
+  checkUser(account, password) {
+    // assume this code cannot be changed
+    fetch('http://localhost:8080/check', {
+      method: "POST",
+      body: JSON.stringify({username: account, password: password})
+    }).then( response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          this.setState({pageState: 'home'})
+        })
+      } else {
+
+      }
+    })
+  }
   render() {
     const pageState = this.state.pageState
     let body
     switch(pageState) {
       case 'login':
-        body = <LoginPage onClick={this.test}/>
+        body = <LoginPage onClick={this.test} checkUser={this.checkUser}/>
         break
       case 'home':
         body = <HomePage />
@@ -75,10 +92,12 @@ function LoginPage(props) {
     var account = document.getElementById("account").value
     let password = document.getElementById('password').value
     // alert(account)
+    props.checkUser(account, password)
     if (account === "" || password === "") {
       alert("Please input both the account and password")
       return
     }
+    
     document.getElementById("record_face").style.display="none";
     document.getElementById("video").style.display="block";
     console.log(account)
