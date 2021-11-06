@@ -101,24 +101,45 @@ async def javascript(request, file):
     content = open(os.path.join(ROOT, file), "r").read()
     return web.Response(content_type="application/javascript", text=content)
 
-async def check(request):
-    post_data = await request.json()
-    print(post_data)
-    return web.json_response({'exist': sqls.checkDuplicateUser(post_data['username'])})
+def sendDictAsJSON(func):
+    def inner(request):
+        return web.json_response(func(request))
+    return inner
 
-async def insertUser(request):
-    post_data = await request.json()
-    print(post_data)
+def getPostData(func):
+    async def inner(request):
+        post_data = await request.json()
+        print(post_data)
+        return func(post_data)
+    return inner
+
+@sendDictAsJSON
+def show_info(request):
+    return {'you are': 'w'}
+
+@getPostData
+@sendDictAsJSON
+def check(post_data):
+    return {'exist': sqls.checkDuplicateUser(post_data['username'])}
+
+@getPostData
+@sendDictAsJSON
+def test2(post_data):
+    return post_data
+
+@getPostData
+@sendDictAsJSON
+def insertUser(post_data):
     sqls.register(post_data['username'], post_data['password'])
     user_in_db = sqls.checkDuplicateUser(post_data['username'])
     if user_in_db:
         sqls.insertLoginHistory(post_data['username'])
-    return web.json_response({'registered': user_in_db})
+    return {'registered': user_in_db}
 
-async def password_login(request):
-    post_data = await request.json()
-    print(post_data)
-    return web.json_response({'loginSucceed': sqls.loginWithPassword(post_data['username'], post_data['password'])})
+@getPostData
+@sendDictAsJSON
+def password_login(post_data):
+    return {'loginSucceed': sqls.loginWithPassword(post_data['username'], post_data['password'])}
 
 async def register(request):  return await offer(request, True)
 
@@ -262,13 +283,15 @@ if __name__ == "__main__":
     app.router.add_get("/logo.png", logo)
     app.router.add_get("/index.js", indexjs)
     app.router.add_get("/RTCserver_connection.js", rtcjs)
+    app.router.add_get("/test", sqlconnector.selection)
+    app.router.add_get("/myInfo", show_info)
     # app.router.add_post("/offer", offer)
     app.router.add_post("/check", check)
     app.router.add_post("/register", register)
     app.router.add_post("/insert", insertUser)
     app.router.add_post("/password_login", password_login)
     app.router.add_post("/login", login)
-    app.router.add_get("/test", sqlconnector.selection)
+    app.router.add_post("/test2", test2)
 
     # Configure default CORS settings.
     cors = aiohttp_cors.setup(app, defaults={
