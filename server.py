@@ -14,7 +14,8 @@ from av import VideoFrame
 
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
-import sqlconnector
+import aiohttp_cors
+import sqlconnector, sqls
 
 from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
 
@@ -112,6 +113,25 @@ async def javascript(request, file):
     content = open(os.path.join(ROOT, file), "r").read()
     return web.Response(content_type="application/javascript", text=content)
 
+async def check(request):
+    post_data = await request.json()
+    print(post_data)
+    return web.json_response({'exist': sqls.checkDuplicateUser(post_data['username'])})
+
+async def insertUser(request):
+    post_data = await request.json()
+    print(post_data)
+    sqls.register(post_data['username'], post_data['password'])
+    user_in_db = sqls.checkDuplicateUser(post_data['username'])
+    if user_in_db:
+        sqls.insertLoginHistory(post_data['username'])
+    return web.json_response({'registered': user_in_db})
+
+async def password_login(request):
+    post_data = await request.json()
+    print(post_data)
+    return web.json_response({'loginSucceed': sqls.loginWithPassword(post_data['username'], post_data['password'])})
+
 # async def stop_this_connection(pc):
 #     transeiver = pc.getTransceivers()
 #     print(pc.getSenders())
@@ -169,9 +189,11 @@ async def offer(request, is_register):
                         print(isPass)
                     channel.send("Passed "+ str(isPass))
                 elif message.startswith('train?'):
-                    await train_model()
+                    if await train_model():
+                        channel.send('Trained')
+                        print('Sent Trained to Client')
                 else:
-                    print("R", message)
+                    print("No matched message: ", message)
 
     @pc.on("iceconnectionstatechange")
     async def on_iceconnectionstatechange():
@@ -229,7 +251,6 @@ async def on_shutdown(app):
     await asyncio.gather(*coros)
     pcs.clear()
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="WebRTC audio / video / data-channels demo"
@@ -262,10 +283,25 @@ if __name__ == "__main__":
     app.router.add_get("/index.js", indexjs)
     app.router.add_get("/RTCserver_connection.js", rtcjs)
     # app.router.add_post("/offer", offer)
+    app.router.add_post("/check", check)
     app.router.add_post("/register", register)
+    app.router.add_post("/insert", insertUser)
+    app.router.add_post("/password_login", password_login)
     app.router.add_post("/login", login)
     app.router.add_get("/test", sqlconnector.selection)
+
+    # Configure default CORS settings.
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+                # allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+            )
+    })
+
+    # Configure CORS on all routes.
+    for route in list(app.router.routes()):
+        cors.add(route)
+
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
-
-
 
