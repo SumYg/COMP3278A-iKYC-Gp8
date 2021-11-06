@@ -7,57 +7,24 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.test = this.test.bind(this)
-    this.checkUser = this.checkUser.bind(this)
+    this.change2Home = this.change2Home.bind(this)
     this.state = {
       pageState: 'login'
     }
   }
   test() {
-    fetch('http://localhost:8080/test').then( response => {
-      if (response.status === 200) {
-        response.json().then( res => {
-          // console.log("check result",res)
-          console.log(res)
-          this.setState({pageState: 'home'})
-          // if (res.loginStatus === false) {
-          //   // this.setState({pageState: 'login'})
-          //   return false
-          // }
-          // else if (res.loginStatus === true) {
-          //   // this.setState({pageState: 'logout', id: res['userID'], username: res['username']})
-          //   // console.log(this.state)
-          //   return true
-          // }
-          // console.log(x)
-        })
-      } else {
-            // this.setState({pageState: 'login'})
-            return false //error
-      }
-    })
+    console.log("Moved ")
   }
-  checkUser(account, password) {
-    // assume this code cannot be changed
-    fetch('http://localhost:8080/check', {
-      method: "POST",
-      body: JSON.stringify({username: account, password: password})
-    }).then( response => {
-      if (response.status === 200) {
-        response.json().then( res => {
-          console.log(res)
-          this.setState({pageState: 'home'})
-        })
-      } else {
-
-      }
-    })
+  
+  change2Home() {
+    this.setState({pageState: 'home'})
   }
   render() {
     const pageState = this.state.pageState
     let body
     switch(pageState) {
       case 'login':
-        body = <LoginPage onClick={this.test} checkUser={this.checkUser}/>
+        body = <LoginPage onClick={this.test} change2Home={this.change2Home}/>
         break
       case 'home':
         body = <HomePage />
@@ -88,28 +55,86 @@ function LoginPage(props) {
     document.getElementById("welcome").innerText="Please register";
     document.getElementById("record_face").style.display="block";
   }
+
   function record() {
+    function afterTrain() {
+      console.log("After Trained")
+      fetch('http://localhost:8080/insert', {
+        method: "POST",
+        body: JSON.stringify({username: account, password: password})
+      }).then( response => {
+        if (response.status === 200) {
+          response.json().then( res => {
+            console.log(res)
+            if (res.registered) {
+              props.change2Home()
+            } else {
+              alert('Failed to register')
+            }
+          })
+        } else {
+          alert("Server return status "+response.status)
+        }
+      })
+    }
     var account = document.getElementById("account").value
     let password = document.getElementById('password').value
-    // alert(account)
-    props.checkUser(account, password)
     if (account === "" || password === "") {
       alert("Please input both the account and password")
-      return
+    } else {
+      // assume this code cannot be changed
+      fetch('http://localhost:8080/check', {
+        method: "POST",
+        body: JSON.stringify({username: account})
+      }).then( response => {
+        if (response.status === 200) {
+          response.json().then( res => {
+            console.log(res)
+            if (res.exist) {
+              console.log('Duplicate Username')
+              alert('Duplicate Username')
+              document.getElementById("account").value = ''
+            } else {
+              console.log('Continue .')
+              document.getElementById("record_face").style.display="none";
+              document.getElementById("video").style.display="block";
+              console.log(account)
+              RTC2server(account, true, afterTrain)
+              console.log('Line after RTC2server')
+            }
+          })
+        } else {
+          alert("Server return status "+response.status)
+        }
+      })
     }
-    
-    document.getElementById("record_face").style.display="none";
-    document.getElementById("video").style.display="block";
-    console.log(account)
-    RTC2server(account, true)
   }
   function login() {
     alert("loging")
-    RTC2server(null, false)
+    RTC2server(null, false, null)
   }
   function passwordlogin(e) {
     e.preventDefault()
-    props.onClick()
+    let account = document.getElementById("account").value
+    let password = document.getElementById('password').value
+    fetch('http://localhost:8080/password_login', {
+      method: "POST",
+      body: JSON.stringify({username: account, password: password})
+    }).then( response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          if (res.loginSucceed) {
+            props.change2Home()
+          } else {
+            alert("Please check your account or password")
+          }
+
+        })
+      } else {
+        alert("Server return status "+response.status)
+      }
+    })
   }
   return <div id="login-page">
   <img style={{width:'300px', maxHeight:"50%"}} src={logo} id="logo" alt='logo'/>
