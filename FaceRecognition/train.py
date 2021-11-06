@@ -19,7 +19,7 @@ def initialize_face_recogn():
         labels = {v: k for k, v in labels.items()}
     recognizer.read("train.yml")
 
-async def recorgn_face(frame):
+def recorgn_face(frame):
     """
         This function tries to recorgnise registered face from the frame
         Return: Frame
@@ -47,12 +47,13 @@ async def recorgn_face(frame):
             stroke = 2
             cv2.putText(frame, name, (x, y), font, 1, color, stroke, cv2.LINE_AA)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), (2))
+            return name, frame
 
             # # Find the customer's information in the database.
-            select = "SELECT customer_id, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Customer WHERE name='%s'" % (name)
-            name = cursor.execute(select)
-            result = cursor.fetchall()
-            print(result)
+            # select = "SELECT customer_id, name, DAY(login_date), MONTH(login_date), YEAR(login_date) FROM Customer WHERE name='%s'" % (name)
+            # name = cursor.execute(select)
+            # result = cursor.fetchall()
+            # print(result)
             # data = "error"
 
             # for x in result:
@@ -137,10 +138,9 @@ async def train_model():
     with open("labels.pickle", "wb") as f:
         pickle.dump(label_ids, f)
 
+    # May fail when no face is recognised in the training data
     # Train the recognizer and save the trained model.
     recognizer.train(x_train, np.array(y_label))
     recognizer.save("train.yml")
     print("Trained")
-    print("Trained")
-    print("Trained")
-    print("Trained")
+    return True
