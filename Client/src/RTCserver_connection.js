@@ -1,4 +1,4 @@
-export function RTC2server(userName, isRegister) {
+export function RTC2server(userName, isRegister, afterTrain) {
     // get DOM elements
     // var dataChannelLog = document.getElementById('data-channel'),
     //     iceConnectionLog = document.getElementById('ice-connection-state'),
@@ -45,10 +45,10 @@ export function RTC2server(userName, isRegister) {
 
         // connect audio / video
         pc.addEventListener('track', function(evt) {
-            if (evt.track.kind === 'video')
+            // if (evt.track.kind === 'video')
                 document.getElementById('video').srcObject = evt.streams[0];
-            else
-                document.getElementById('audio').srcObject = evt.streams[0];
+            // else
+            //     document.getElementById('audio').srcObject = evt.streams[0];
         });
 
         return pc;
@@ -76,7 +76,7 @@ export function RTC2server(userName, isRegister) {
             var offer = pc.localDescription;
             // codec = 'VP8/90000'
             // document.getElementById('offer-sdp').textContent = offer.sdp;
-            return fetch(isRegister? '/register': '/login', {
+            return fetch('http://localhost:8080/'+(isRegister? 'register': 'login'), {
             // return fetch('/login', {
                 body: JSON.stringify({
                     sdp: offer.sdp,
@@ -110,14 +110,14 @@ export function RTC2server(userName, isRegister) {
             // dataChannelLog.textContent += '- close\n';
         };
         dc.onopen = function() {
-            // dataChannelLog.textContent += '- open\n';
-            // dcInterval = setInterval(function() {
-                // var message = userName + current_stamp();
+            if (userName != null) {
                 var message = "User " + userName;
                 console.log(message)
                 // dataChannelLog.textContent += '> ' + message + '\n';
                 dc.send(message);
-            // }, 1000);
+            } else {
+                dc.send('log!')
+            }
         };
         dc.onmessage = function(evt) {
             // dataChannelLog.textContent += '< ' + evt.data + '\n';
@@ -128,9 +128,23 @@ export function RTC2server(userName, isRegister) {
                 if (!passed) {
                     dc.send("check");
                 } else {
-                    stop();
+                    if (userName == null) {
+                        console.log("Stoppppppppppppp")
+                        stopCamera();
+                        stop()
+                        afterTrain()
+                        return
+                    }
+                    stopCamera();
+                    console.log("New bersion?")
                     dc.send('train?');
                 }
+            } else if (evt.data.substring(0, 7) === 'Trained') {
+                console.log('Received Trained from Server')
+                stop()
+                afterTrain()
+                console.log('afterTrain(')
+                // return true
             }
         };
 
@@ -168,15 +182,20 @@ export function RTC2server(userName, isRegister) {
             });
         }
 
-        // close local audio / video
-        pc.getSenders().forEach(function(sender) {
-            sender.track.stop();
-        });
+        
 
         // close peer connection
         setTimeout(function() {
             pc.close();
         }, 500);
+    }
+
+    function stopCamera() {
+        // close local audio / video
+        pc.getSenders().forEach(function(sender) {
+            console.log(sender)
+            sender.track.stop();
+        });
     }
 }
 
