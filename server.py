@@ -52,31 +52,14 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
-        # frame = VideoFrame(width=1280, height=720)
-
-        # frame = VideoFrame(width=1280, height=720)
         if self.user_name == None:
-            # img = frame.to_ndarray(format='bgr24')
-            # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-            # print(self.user_ref)
             self.user_name = self.user_ref[0]
-            # new_frame = VideoFrame.from_ndarray(cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB), format="bgr24")
-            # new_frame.pts = frame.pts
-            # new_frame.time_base = frame.time_base
             if self.user_name != None and not os.path.exists(PATH_FACES + self.user_name):
                 os.mkdir(PATH_FACES + self.user_name)
             # return new_frame
         img = frame.to_ndarray(format='bgr24')
         if self.is_register:
             if self.cnt <= NUM_IMGS:
-                # await stop_this_connection(self.pc)
-                # await self.track.stop()
-                # return
-                # print(type(frame))
-                # gray = cv2.cvtColor(frame.to_ndarray(format='bgr24'), cv2.COLOR_BGR2GRAY)
-                # ctime = time()
-                # if self.time + 1 < ctime:
-                # self.time = ctime
                 print(frame)
                 print(f"w: {frame.width} h: {frame.height} format: {frame.format}")
                 cv2.imwrite("{}{}/{}{:03d}.jpg".format(PATH_FACES, self.user_name, self.user_name, self.cnt), img)
@@ -85,15 +68,20 @@ class VideoTransformTrack(MediaStreamTrack):
                 print("Change State")
                 self.passed.append(None)
         else:
-            new_frame = await recorgn_face(img)
+            new_frame = recorgn_face(img)
+            if type(new_frame) is tuple:
+                name, new_frame = new_frame
+                if len(self.passed) == 0:
+                    sqls.insertLoginHistory(name)
+                    print(name)
+                    self.passed.append(name)
+                    
             # new_frame = cv2.cvtColor(new_frame, cv2.COLOR_GRAY2RGB)
             new_frame = VideoFrame.from_ndarray(new_frame, format="bgr24")
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             frame = new_frame
-
         return frame
-
 
 async def index(request):
     content = open(os.path.join(ROOT, "index.html"), "r").read()
@@ -132,17 +120,6 @@ async def password_login(request):
     print(post_data)
     return web.json_response({'loginSucceed': sqls.loginWithPassword(post_data['username'], post_data['password'])})
 
-# async def stop_this_connection(pc):
-#     transeiver = pc.getTransceivers()
-#     print(pc.getSenders())
-#     print(transeiver)
-#     print(transeiver[0].sender)
-#     print(transeiver[0].currentDirection)
-#     print(transeiver[0].sender)
-#     await transeiver[0].sender.send("Hello World")
-#     # transeiver.send()
-#     return
-
 async def register(request):  return await offer(request, True)
 
 async def login(request):  return await offer(request, False)
@@ -180,11 +157,14 @@ async def offer(request, is_register):
                     user_name[0] = username
                     channel.send("You are " + username)
                     channel.send("Passed "+ str(len(passed) > 0))
+                elif message.startswith('log'):
+                    channel.send("Passed "+ str(len(passed) > 0))
+                    print("=================")
                 elif message.startswith("check"):
                     isPass = len(passed) > 0
                     print('[][]', isPass, passed)
                     while isPass != True:
-                        await asyncio.sleep(3)
+                        await asyncio.sleep(1)
                         isPass = len(passed) > 0
                         print(isPass)
                     channel.send("Passed "+ str(isPass))

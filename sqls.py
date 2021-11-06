@@ -10,6 +10,8 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
+USER_NAME = None
+
 def loginWithPassword(username, password):
     query = f"SELECT username FROM Customer WHERE username = '{username}' AND password= '{password}'"
     mycursor.execute(query)
@@ -36,6 +38,8 @@ def register(username, password):
     print(mycursor.rowcount, "record inserted.")
 
 def insertLoginHistory(username):
+    global USER_NAME
+    USER_NAME = username
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     query = f"INSERT INTO Login_History VALUES('{current_time}', '{username}')"
     mycursor.execute(query)
