@@ -110,8 +110,8 @@ function LoginPage(props) {
     }
   }
   function login() {
-    alert("loging")
-    RTC2server(null, false, null)
+    // alert("loging")
+    RTC2server(null, false, props.change2Home)
   }
   function passwordlogin(e) {
     e.preventDefault()
