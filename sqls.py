@@ -10,11 +10,24 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
+def loginWithPassword(username, password):
+    query = f"SELECT username FROM Customer WHERE username = '{username}' AND password= '{password}'"
+    mycursor.execute(query)
+    result = len(mycursor.fetchall())
+    if result == 1:
+        insertLoginHistory(username)
+        return True
+    return False
+
 def checkDuplicateUser(username):
+    """
+    Return True when the username exist
+    Else return False
+    """
     query = f"SELECT username FROM Customer WHERE username = '{username}'"
     mycursor.execute(query)
     result = len(mycursor.fetchall())
-    return result
+    return result != 0
     
 def register(username, password):
     query = f"INSERT INTO Customer (username, password) VALUES ('{username}', '{password}')"
