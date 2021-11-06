@@ -115,7 +115,13 @@ def getPostData(func):
 
 @sendDictAsJSON
 def show_info(request):
-    return {'you are': 'w'}
+    records = sqls.getInfo()
+    if len(records) >= 2:
+        first, second = records
+        return {'username': first[1], 'current': first[0], 'previous': second[0]}
+    else:
+        # No enough login history
+        return {}
 
 @getPostData
 @sendDictAsJSON
