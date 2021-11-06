@@ -15,11 +15,17 @@ USER_NAME = None
 def loginWithPassword(username, password):
     query = f"SELECT username FROM Customer WHERE username = '{username}' AND password= '{password}'"
     mycursor.execute(query)
-    result = len(mycursor.fetchall())
-    if result == 1:
+    if len(mycursor.fetchall()) == 1:
         insertLoginHistory(username)
         return True
     return False
+
+def getInfo():
+    """
+    Return username, First 2 latest login time
+    """
+    print('USER_NAME', USER_NAME)
+    return (('2021-11-06 19:14:37', 'we'), ('2021-11-06 17:02:46', 'we'))
 
 def checkDuplicateUser(username):
     """
@@ -40,6 +46,7 @@ def register(username, password):
 def insertLoginHistory(username):
     global USER_NAME
     USER_NAME = username
+    print("Set USER_NAME", USER_NAME)
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     query = f"INSERT INTO Login_History VALUES('{current_time}', '{username}')"
     mycursor.execute(query)
