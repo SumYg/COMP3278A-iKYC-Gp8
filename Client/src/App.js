@@ -2,7 +2,7 @@ import logo from './logo.png';
 import './App.css';
 import React from 'react';
 import {RTC2server} from "./RTCserver_connection.js"
-
+import profilepic from './profilepic.png';
 const pyServerAddress = 'http://localhost:8080/'
 
 class App extends React.Component {
@@ -13,8 +13,8 @@ class App extends React.Component {
     this.setMainState = this.setMainState.bind(this)
     this.state = {
       pageState: 'login',
-      username: 'A',
-      current: 'BC',
+      // username: 'A',
+      // current: 'BC',
     }
   }
   test() {
@@ -100,11 +100,16 @@ function StockPage(props) {
 function HomePage(props) {
   return   <div id='home-page'>
     <h1>Welcome</h1>
-    <div>
+    <div id="outter_user_frame">
       <div id="user_frame">
+        <img style={{width:'50%', maxHeight:"50%"}} src={profilepic} id="profilepic" alt='profilepic'/>
         <div id="user_frame_username">username: {props.username}</div>
         <div id="user_frame_last_login">Last login: {props.current}</div>
+        
       </div>
+      {/* <div>
+        <img style={{width:'45%', height:"30%"}} src={creditcard} id="creditcard" alt='creditcard'/>
+      </div> */}
     </div>
     <div>
     <button id="user_info" onClick={() => {props.setMainState('history')}}>User info</button>
