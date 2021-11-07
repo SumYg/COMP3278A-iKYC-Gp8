@@ -22,9 +22,20 @@ def loginWithPassword(username, password):
 
 def getInfo():
     """
-    Return username, First 2 latest login time
+    Return username, latest login time
     """
-    query = f"SELECT username, time FROM Login_History WHERE username = '{USER_NAME}' ORDER BY time DESC LIMIT 2"
+    query = f"SELECT username, time FROM Login_History WHERE username = '{USER_NAME}' ORDER BY time DESC LIMIT 1"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    mydb.commit()
+    print(result)
+    return result
+
+def getAllInfo():
+    """
+    Return username, all login time
+    """
+    query = f"SELECT username, time FROM Login_History WHERE username = '{USER_NAME}' ORDER BY time DESC"
     mycursor.execute(query)
     result = mycursor.fetchall()
     mydb.commit()
@@ -96,6 +107,62 @@ def createCreditAccount(username, available, remaining):
     mycursor.execute(query)
     mydb.commit()
     
+def getSavingAccount():
+    """
+    Return info of user.saving account
+    """
+    query = f"SELECT S.account_number, S.currency, S.amount FROM Account A, Saving S WHERE A.account_number = S.account_number AND A.username = '{USER_NAME}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()
+    mydb.commit()
+    print(result)
+    return result
+    
+def getCreditAccount():
+    """
+    Return info of user.credit account
+    """
+    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()
+    mydb.commit()
+    print(result)
+    return result
+    
+def getInvestAccount():
+    """
+    Return account number, amount in table Investment 
+    """
+    query = f"SELECT I.account_number, I.amount FROM Account A, Investment I WHERE A.account_number = I.account_number AND A.username = '{USER_NAME}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()
+    mydb.commit()
+    print(result)
+    return result
+    
+def getOwnerOfAccount(accNo):
+    """
+    Return username
+    """
+    query = f"SELECT username FROM Account WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    mydb.commit()
+    #print(result)
+    return result
+
+def checkTransAmountFromSaving(accNo, amount):
+    """
+    check whether the amount in saving can complete the transaction 
+    return true/false 
+    """
+    query = f"SELECT amount FROM Saving WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    mydb.commit()
+    #print(result >= amount)
+    return (result >= amount)
+    
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
@@ -105,4 +172,10 @@ def createCreditAccount(username, available, remaining):
 #createSavingAccount("edmund", "HKD", 0)
 #createInvestAccount("edmund", 0)
 #createCreditAccount("edmund", 10000, 10000)
-
+USER_NAME = "edmund"
+#getAllInfo()
+#getSavingAccount()
+#getCreditAccount()
+#getInvestAccount()
+#getOwnerOfAccount("00000001")
+#checkTransAmountFromSaving(getSavingAccount()[0], 1000)
