@@ -117,7 +117,8 @@ def getPostData(func):
 def show_info(request):
     records = sqls.getInfo()
     if len(records) >= 2:
-        return {'username': records[0], 'current': records[1].strftime("%Y-%m-%d %H:%M:%S")}
+        this, previous = records
+        return {'username': previous[0], 'current': previous[1].strftime("%Y-%m-%d %H:%M:%S")}
     else:
         # No enough login history
         return {}
