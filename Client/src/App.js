@@ -10,6 +10,7 @@ class App extends React.Component {
     super(props)
     this.test = this.test.bind(this)
     this.change2Home = this.change2Home.bind(this)
+    this.setMainState = this.setMainState.bind(this)
     this.state = {
       pageState: 'login',
       username: 'A',
@@ -19,7 +20,9 @@ class App extends React.Component {
   test() {
     console.log("Moved ")
   }
-  
+  setMainState(state) {
+    this.setState({pageState: state})
+  }
   change2Home() {
     fetch(pyServerAddress + 'myInfo').then(response => {
       if (response.status === 200) {
@@ -31,12 +34,10 @@ class App extends React.Component {
         alert("Server return status "+response.status)
       }
     })
-    this.setState({pageState: 'home'})
+    this.setMainState('home')
   }
   
-  setMainState(dc) {
-    this.setState(dc)
-  }
+  
   render() {
     const pageState = this.state.pageState
     let body
@@ -45,7 +46,16 @@ class App extends React.Component {
         body = <LoginPage onClick={this.test} change2Home={this.change2Home}/>
         break
       case 'home':
-        body = <HomePage username={this.state.username} current={this.state.current}/>
+        body = <HomePage username={this.state.username} current={this.state.current} setMainState={this.setMainState}/>
+        break
+      case 'account':
+        body = <AccountPage setMainState={this.setMainState}/>
+        break
+      case 'history':
+        body = <HistoryPage setMainState={this.setMainState}/>
+        break
+      case 'stock':
+        body = <StockPage setMainState={this.setMainState}/>
         break
       default:
         body = null
@@ -59,10 +69,48 @@ class App extends React.Component {
   }
 }
 
+function BackToHomeButton(props) {
+  return <button onClick={() => {props.setMainState('home')}}>Back To Home</button>
+}
+
+function AccountPage(props) {
+  return <div id='account-page'>
+    <h1>Account Page</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+  </div>
+}
+
+function HistoryPage(props) {
+  return <div id='history-page'>
+    <h1>History Page</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+    
+  </div>
+}
+
+function StockPage(props) {
+  return <div id='stock-page'>
+    <h1>Stock Page</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+    
+  </div>
+}
+
+
 function HomePage(props) {
   return   <div id='home-page'>
-    <h1>Welcome {props.username}</h1>
-    {props.current}
+    <h1>Welcome</h1>
+    <div>
+      <div id="user_frame">
+        <div id="user_frame_username">username: {props.username}</div>
+        <div id="user_frame_last_login">Last login: {props.current}</div>
+      </div>
+    </div>
+    <div>
+    <button id="user_info" onClick={() => {props.setMainState('history')}}>User info</button>
+    <button id="account_info" onClick={() => {props.setMainState('account')}}>Account info</button>
+    <button id="stock_info" onClick={() => {props.setMainState('stock')}}>Stock</button>
+    </div>
   </div>
 }
 
