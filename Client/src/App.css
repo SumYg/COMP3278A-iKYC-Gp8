@@ -10,7 +10,7 @@ body {
 
 }
 
-button {
+#login-page button {
   padding: 7px 17px;
   background-image: linear-gradient(to bottom right, #f97793bd, #623aa2ce);
   /* background-color: rgba(238, 226, 224, 0.356); */
@@ -20,7 +20,52 @@ button {
   margin-bottom: 1em;
   font-weight: bold;
 }
+#user_info,#account_info,#stock_info{
+  font-family: 'Source Sans Pro', sans-serif;
+  position: absolute;
+  background-image: linear-gradient(to bottom right, #f97793bd, #623aa2ce);
+  color: rgba(0, 0, 0, 0.911);
+  border-radius: 15px;
+  margin-bottom: 1em;
+  font-weight: bold;
+  right: 5%;
+  padding: 5% 10%;
+  width: 40%;
+  font-size: 1.8em;
+}
+#user_info{
+  margin-top: 5%;
+}
+#account_info{
+  margin-top: 23%;
+}
+#stock_info{
+  margin-top: 41%;
+}
+#user_frame{
+  padding: 5%;
+  font-size: 1.8em;
+  position: absolute;
+  left: 3%;
+  width: 35%;
+  background-image: linear-gradient(to bottom right, #f97793bd, #623aa2ce);;
+  border-radius: 15px;
+  border-color: linear-gradient(to bottom right, #f97793bd, #623aa2ce);
+  border-width: 3px;
+  border-style: inset solid solid inset;
+  align-items: center;
+  text-align: center;
+  margin-top: 5%;
+  height: 55%;
+  
+}
 
+
+/* #creditcard{
+  position: absolute;
+  bottom: 5%;
+  left: 3%;
+} */
 label {
   width: 6em;
   float: left;
@@ -71,6 +116,9 @@ label {
     /* border-color: rgba(255, 140, 0, 0.267); */
     border-width: 5px;
     border-style: dotted;
+}
+#home-page{
+  position: relative;
 }
 #logo {
   mix-blend-mode: multiply;
