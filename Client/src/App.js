@@ -3,6 +3,7 @@ import './App.css';
 import React from 'react';
 import {RTC2server} from "./RTCserver_connection.js"
 import profilepic from './profilepic.png';
+import creditcard from './creditcard.png';
 const pyServerAddress = 'http://localhost:8080/'
 
 class App extends React.Component {
