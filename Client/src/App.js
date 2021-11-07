@@ -3,13 +3,17 @@ import './App.css';
 import React from 'react';
 import {RTC2server} from "./RTCserver_connection.js"
 
+const pyServerAddress = 'http://localhost:8080/'
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.test = this.test.bind(this)
     this.change2Home = this.change2Home.bind(this)
     this.state = {
-      pageState: 'login'
+      pageState: 'login',
+      username: 'A',
+      current: 'BC',
     }
   }
   test() {
@@ -17,7 +21,21 @@ class App extends React.Component {
   }
   
   change2Home() {
+    fetch(pyServerAddress + 'myInfo').then(response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          this.setState(res)
+        })
+      } else {
+        alert("Server return status "+response.status)
+      }
+    })
     this.setState({pageState: 'home'})
+  }
+  
+  setMainState(dc) {
+    this.setState(dc)
   }
   render() {
     const pageState = this.state.pageState
@@ -27,7 +45,7 @@ class App extends React.Component {
         body = <LoginPage onClick={this.test} change2Home={this.change2Home}/>
         break
       case 'home':
-        body = <HomePage />
+        body = <HomePage username={this.state.username} current={this.state.current}/>
         break
       default:
         body = null
@@ -43,7 +61,8 @@ class App extends React.Component {
 
 function HomePage(props) {
   return   <div id='home-page'>
-    <h1>Welcome</h1>
+    <h1>Welcome {props.username}</h1>
+    {props.current}
   </div>
 }
 
@@ -59,7 +78,7 @@ function LoginPage(props) {
   function record() {
     function afterTrain() {
       console.log("After Trained")
-      fetch('http://localhost:8080/insert', {
+      fetch(pyServerAddress + 'insert', {
         method: "POST",
         body: JSON.stringify({username: account, password: password})
       }).then( response => {
@@ -83,7 +102,7 @@ function LoginPage(props) {
       alert("Please input both the account and password")
     } else {
       // assume this code cannot be changed
-      fetch('http://localhost:8080/check', {
+      fetch(pyServerAddress + 'check', {
         method: "POST",
         body: JSON.stringify({username: account})
       }).then( response => {
@@ -117,7 +136,7 @@ function LoginPage(props) {
     e.preventDefault()
     let account = document.getElementById("account").value
     let password = document.getElementById('password').value
-    fetch('http://localhost:8080/password_login', {
+    fetch(pyServerAddress + 'password_login', {
       method: "POST",
       body: JSON.stringify({username: account, password: password})
     }).then( response => {
@@ -129,7 +148,6 @@ function LoginPage(props) {
           } else {
             alert("Please check your account or password")
           }
-
         })
       } else {
         alert("Server return status "+response.status)
