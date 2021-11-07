@@ -24,8 +24,12 @@ def getInfo():
     """
     Return username, First 2 latest login time
     """
-    print('USER_NAME', USER_NAME)
-    return (('2021-11-06 19:14:37', 'we'), ('2021-11-06 17:02:46', 'we'))
+    query = f"SELECT username, time FROM Login_History WHERE username = '{USER_NAME}' ORDER BY time DESC LIMIT 1"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    mydb.commit()
+    print(result)
+    return result[0]
 
 def checkDuplicateUser(username):
     """
