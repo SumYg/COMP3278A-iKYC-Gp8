@@ -115,10 +115,9 @@ def getPostData(func):
 
 @sendDictAsJSON
 def show_info(request):
-    records = sqls.getInfo()
-    if len(records) >= 2:
-        this, previous = records
-        return {'username': previous[0], 'current': previous[1].strftime("%Y-%m-%d %H:%M:%S")}
+    records = sqls.getInfo()[0]
+    if len(records) >= 1:
+        return {'username': records[0], 'current': records[1].strftime("%Y-%m-%d %H:%M:%S")}
     else:
         # No enough login history
         return {}
