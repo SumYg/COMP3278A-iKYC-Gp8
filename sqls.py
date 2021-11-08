@@ -203,9 +203,24 @@ def makeTransFromSaving(from_acc, to_acc, amount):
       
 def getTransactionHistory(accNo):
     """
-    get transaction history related to the given account 
+    get transaction history related to the given account
+    return 2d list
     """
     query = f"SELECT * FROM Transaction WHERE from_account = '{accNo}' OR to_account = '{accNo}'"
+    mycursor.execute(query)
+    result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+
+def getTransactionHistoryYMD(accNo, year, month, day):
+    """
+    get transaction history related to the given account
+    in a given date e.g. 20211107
+    return 2d list
+    """
+    date = f"{year}{month}{day}"
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND date = '{date}'"
     mycursor.execute(query)
     result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
     mydb.commit()
