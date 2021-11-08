@@ -10,6 +10,8 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+(If node_modules directory does not exist, run npm install (or yarn) to ensure all deps are downloaded. 
+After a fresh clone, there will very likely be no node_modules (since these are .gitignore'd))
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
