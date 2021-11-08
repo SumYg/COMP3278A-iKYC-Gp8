@@ -166,7 +166,41 @@ def checkTransAmountFromSaving(accNo, amount):
     mydb.commit()
     #print(result >= amount)
     return (result >= amount)
-    
+
+def countTrans():
+    query = f"SELECT COUNT(*) FROM Transaction"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    #print(result)
+    return result
+
+def updateAccount(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Saving SET amount = amount-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Saving SET amount = amount+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")
+
+def makeTransFromSaving(from_acc, to_acc, amount):
+    if (checkTransAmountFromSaving(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateAccount(from_acc, amount, 0)
+        updateAccount(to_acc, amount, 1)
+    else:
+        return -1
+        
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
@@ -183,3 +217,4 @@ USER_NAME = "edmund"
 #getInvestAccount()
 #getOwnerOfAccount("00000001")
 #checkTransAmountFromSaving(getSavingAccount()[0], 1000)
+makeTransFromSaving("00000001", "00000007", 100)
