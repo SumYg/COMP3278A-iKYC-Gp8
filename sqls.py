@@ -212,11 +212,10 @@ def getTransactionHistory(accNo):
     mydb.commit()
     print(result)
     return result
-
 def getTransactionHistoryYMD(accNo, year, month, day):
     """
     get transaction history related to the given account
-    in a given date e.g. 20211107
+    in a given year, month and date e.g. 20211107
     return 2d list
     """
     date = f"{year}{month}{day}"
@@ -226,6 +225,44 @@ def getTransactionHistoryYMD(accNo, year, month, day):
     mydb.commit()
     print(result)
     return result
+    
+def getTransactionHistoryYM(accNo, year, month):
+    """
+    get transaction history related to the given account
+    in a given year and month e.g. from 20211101 to 20211131
+    return 2d list
+    """
+    from_date = f"{year}{month}01"
+    to_date = f"{year}{month}31"
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{from_date}' AND date <= '{to_date}')"
+    mycursor.execute(query)
+    result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+
+#register("hhh","111")
+#insertLoginHistory("John")
+#changePassword("John", "abcde")
+#createAccount("edmund")
+#checkDuplicateUser("j")
+#countAcount()
+#createSavingAccount("edmund", "HKD", 0)
+#createInvestAccount("edmund", 0)
+#createCreditAccount("edmund", 10000, 10000)
+USER_NAME = "edmund"
+#getAllInfo()
+#getSavingAccount()
+#getCreditAccount()
+#getInvestAccount()
+#getOwnerOfAccount("00000001")
+#checkTransAmountFromSaving(getSavingAccount()[0], 1000)
+#makeTransFromSaving("getSavingAccount()", "00000007", 100)
+#getAccountType("00000001")
+#getTransactionHistory("00000001")
+#getAllInfo()()
+#getTransactionHistoryYMD("00000001", "2021", "11", "08")
+getTransactionHistoryYMD("00000001", "2021", "11")
   
 #register("hhh","111")
 #insertLoginHistory("John")
