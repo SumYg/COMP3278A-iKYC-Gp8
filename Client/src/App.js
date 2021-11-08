@@ -15,6 +15,9 @@ class App extends React.Component {
     this.setMainState = this.setMainState.bind(this)
     this.state = {
       pageState: 'login',
+      saving: ["HKD",123],
+      invest: ["12312",123,"",""],
+      credit: ["123123",123]
       // username: 'A',
       // current: 'BC',
     }
@@ -30,6 +33,38 @@ class App extends React.Component {
             response.json().then( res => {
               console.log(res)
               this.setState({'historyData': res['data']})
+            })
+          } else {
+            alert("Server return status "+response.status)
+          }
+        })
+      break
+      case 'account':
+        fetch(pyServerAddress + 'getSaving').then(response => {
+          if (response.status === 200) {
+            response.json().then( res => {
+              console.log(res)
+              this.setState({'saving': res['data']})
+            })
+          } else {
+            alert("Server return status "+response.status)
+          }
+        })
+        fetch(pyServerAddress + 'getCredit').then(response => {
+          if (response.status === 200) {
+            response.json().then( res => {
+              console.log(res)
+              this.setState({'credit': res['data']})
+            })
+          } else {
+            alert("Server return status "+response.status)
+          }
+        })
+        fetch(pyServerAddress + 'getInvest').then(response => {
+          if (response.status === 200) {
+            response.json().then( res => {
+              console.log(res)
+              this.setState({'invest': res['data']})
             })
           } else {
             alert("Server return status "+response.status)
@@ -66,13 +101,16 @@ class App extends React.Component {
         body = <HomePage username={this.state.username} current={this.state.current} setMainState={this.setMainState}/>
         break
       case 'account':
-        body = <AccountPage setMainState={this.setMainState}/>
+        body = <AccountPage setMainState={this.setMainState} saving={this.state.saving} credit={this.state.credit} invest={this.state.invest}/>
         break
       case 'history':
         body = <HistoryPage setMainState={this.setMainState} historyData={this.state.historyData}/>
         break
       case 'stock':
         body = <StockPage setMainState={this.setMainState}/>
+        break
+      case 'transaction':
+        body = <TransactionPage setMainState={this.setMainState}/>
         break
       default:
         body = null
@@ -87,18 +125,32 @@ class App extends React.Component {
 }
 
 function LogoutButton() {
-  return <button onClick={() => {window.location.reload()}}>Logout</button>
+  return <button id="logout-but" onClick={() => {window.location.reload()}}>Logout</button>
 }
 
 function BackToHomeButton(props) {
   return <button onClick={() => {props.setMainState('home')}}>Back To Home</button>
 }
-
+function TransactionPage(props){
+  return <div id="transaction-page">
+    <h1>TransactionPage</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
+  </div>
+}
 function AccountPage(props) {
   return <div id='account-page'>
     <h1>Account Page</h1>
+    <h2>click the accounts to see the transactions</h2>
+    
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
+    <div>
+      <button id="saving" onClick={()=>{props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >debt:{props.credit[3]}</span></div></button>
+      <button id="investment" onClick={()=>{props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
+      
+    </div>
   </div>
 }
 
