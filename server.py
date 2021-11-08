@@ -115,13 +115,18 @@ def getPostData(func):
 
 @sendDictAsJSON
 def show_info(request):
-    records = sqls.getInfo()[0]
+    records = sqls.getInfo()
     if len(records) >= 1:
+        records = records[0]
         return {'username': records[0], 'current': records[1].strftime("%Y-%m-%d %H:%M:%S")}
     else:
         # No enough login history
-        return {}
+        return {'username': sqls.USER_NAME, 'current': 'This is your first login'}
 
+@sendDictAsJSON
+def show_all_info(request):
+    
+    return {'data': sqls.getAllInfo()}
 @getPostData
 @sendDictAsJSON
 def check(post_data):
@@ -290,6 +295,7 @@ if __name__ == "__main__":
     app.router.add_get("/RTCserver_connection.js", rtcjs)
     app.router.add_get("/test", sqlconnector.selection)
     app.router.add_get("/myInfo", show_info)
+    app.router.add_get("/allInfo", show_all_info)
     # app.router.add_post("/offer", offer)
     app.router.add_post("/check", check)
     app.router.add_post("/register", register)
