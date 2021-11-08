@@ -13,6 +13,7 @@ class App extends React.Component {
     this.test = this.test.bind(this)
     this.change2Home = this.change2Home.bind(this)
     this.setMainState = this.setMainState.bind(this)
+    this.setCurrentAccount = this.setCurrentAccount.bind(this)
     this.state = {
       pageState: 'login',
       saving: ["HKD",123],
@@ -24,6 +25,9 @@ class App extends React.Component {
   }
   test() {
     console.log("Moved ")
+  }
+  setCurrentAccount(state) {
+    this.setState({'currentAcc': state})
   }
   setMainState(state) {
     switch(state) {
@@ -101,7 +105,7 @@ class App extends React.Component {
         body = <HomePage username={this.state.username} current={this.state.current} setMainState={this.setMainState}/>
         break
       case 'account':
-        body = <AccountPage setMainState={this.setMainState} saving={this.state.saving} credit={this.state.credit} invest={this.state.invest}/>
+        body = <AccountPage setMainState={this.setMainState} saving={this.state.saving} credit={this.state.credit} invest={this.state.invest} setCurrentAccount={this.setCurrentAccount}/>
         break
       case 'history':
         body = <HistoryPage setMainState={this.setMainState} historyData={this.state.historyData}/>
@@ -110,7 +114,7 @@ class App extends React.Component {
         body = <StockPage setMainState={this.setMainState}/>
         break
       case 'transaction':
-        body = <TransactionPage setMainState={this.setMainState}/>
+        body = <TransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc}/>
         break
       default:
         body = null
@@ -134,6 +138,7 @@ function BackToHomeButton(props) {
 function TransactionPage(props){
   return <div id="transaction-page">
     <h1>TransactionPage</h1>
+    {props.currentAcc}
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
   </div>
@@ -146,9 +151,9 @@ function AccountPage(props) {
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
     <div>
-      <button id="saving" onClick={()=>{props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >debt:{props.credit[3]}</span></div></button>
-      <button id="investment" onClick={()=>{props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
+      <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >debt:{props.credit[3]}</span></div></button>
+      <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
       
     </div>
   </div>
