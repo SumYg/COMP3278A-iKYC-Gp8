@@ -4,6 +4,7 @@ import React from 'react';
 import {RTC2server} from "./RTCserver_connection.js"
 import profilepic from './profilepic.png';
 import creditcard from './creditcard.png';
+import ArrayRecords from './Tables.js'
 const pyServerAddress = 'http://localhost:8080/'
 
 class App extends React.Component {
@@ -22,6 +23,21 @@ class App extends React.Component {
     console.log("Moved ")
   }
   setMainState(state) {
+    switch(state) {
+      case 'history':
+        fetch(pyServerAddress + 'allInfo').then(response => {
+          if (response.status === 200) {
+            response.json().then( res => {
+              console.log(res)
+              this.setState({'historyData': res['data']})
+            })
+          } else {
+            alert("Server return status "+response.status)
+          }
+        })
+      break
+      default:  // do nothing
+    }
     this.setState({pageState: state})
   }
   change2Home() {
@@ -53,7 +69,7 @@ class App extends React.Component {
         body = <AccountPage setMainState={this.setMainState}/>
         break
       case 'history':
-        body = <HistoryPage setMainState={this.setMainState}/>
+        body = <HistoryPage setMainState={this.setMainState} historyData={this.state.historyData}/>
         break
       case 'stock':
         body = <StockPage setMainState={this.setMainState}/>
@@ -70,6 +86,10 @@ class App extends React.Component {
   }
 }
 
+function LogoutButton() {
+  return <button onClick={() => {window.location.reload()}}>Logout</button>
+}
+
 function BackToHomeButton(props) {
   return <button onClick={() => {props.setMainState('home')}}>Back To Home</button>
 }
@@ -78,13 +98,23 @@ function AccountPage(props) {
   return <div id='account-page'>
     <h1>Account Page</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
   </div>
 }
 
 function HistoryPage(props) {
+  
   return <div id='history-page'>
-    <h1>History Page</h1>
+    <h1>Login History</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
+    <div id='history-div' style={{overflow: 'auto', height: '80%'}}>
+    <table id='history-table' >
+      <tbody>
+      <ArrayRecords records={props.historyData} />
+      </tbody>
+    </table>
+    </div>
     
   </div>
 }
@@ -93,6 +123,7 @@ function StockPage(props) {
   return <div id='stock-page'>
     <h1>Stock Page</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
     
   </div>
 }
@@ -117,6 +148,7 @@ function HomePage(props) {
     <button id="account_info" onClick={() => {props.setMainState('account')}}>Account info</button>
     <button id="stock_info" onClick={() => {props.setMainState('stock')}}>Stock</button>
     </div>
+    <LogoutButton />
   </div>
 }
 
