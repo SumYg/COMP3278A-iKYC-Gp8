@@ -200,7 +200,18 @@ def makeTransFromSaving(from_acc, to_acc, amount):
         updateAccount(to_acc, amount, 1)
     else:
         return -1
-        
+      
+def getTransactionHistory(accNo):
+    """
+    get transaction history related to the given account 
+    """
+    query = f"SELECT * FROM Transaction WHERE from_account = '{accNo}' OR to_account = '{accNo}'"
+    mycursor.execute(query)
+    result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+  
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
