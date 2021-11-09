@@ -1,3 +1,7 @@
+html {
+  /* height: 100vh; */
+  overflow: hidden;
+}
 body {
   background-image: linear-gradient(to bottom right, #F97794, #623AA2);
   background-color: #5F4B8BFF;
@@ -100,35 +104,30 @@ label {
 }
 
 #root {
-  height: 100%;
+  height: 80%;
   z-index: -1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  
 }
+
 #login-page, #home-page, #account-page, #history-page, #stock-page,#transaction-page {
-  height: fit-content;
-  width: fit-content;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center; 
   position: relative;
-  padding: 3em 10em;
-  /* margin-bottom: 10%; */
-  background-color: rgba(240, 233, 223, 0.35);
-  border-radius: 70px;
-  border-color: rgba(240, 233, 223, 0.35);
-  /* border-color: rgba(255, 140, 0, 0.267); */
-  border-width: 5px;
-  border-style: dotted;
+
+  margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 10vh;
+    /* margin-bottom: 10%; */
+    background-color: rgba(240, 233, 223, 0.35);
+    border-radius: 60px;
+    border-color: rgba(240, 233, 223, 0.35);
+    /* border-color: rgba(255, 140, 0, 0.267); */
+    border-width: 5px;
+    border-style: dotted;
 }
-#home-page {
-  width: 50%;
-  height: 67%;
-}
-#account-page {
-  height: 56%;
-}
+
 #home-page a {
   width: 100%;
   word-wrap: break-word;
