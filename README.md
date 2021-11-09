@@ -18,10 +18,12 @@ Then open http://localhost:8080 in browser
 - [ ] Show camera video when using face id to login
 - [x] Redirect/Change to Home Page after the face of the user is recorgnised
 - [x] Register Page
+- [ ] Show loading animation instead of camera capture when the server is training model
 - [x] Turn off camera after capturing enough photos to train model in the server
 - [x] Check for the existence of username and insert new user into the DB
 - [x] Redirect/Change to the Home Page after the model is trained
-- [ ] Home Page
+- [x] Home Page
+- [ ] Transaction Page
 
 ## Some Screenshots and Explanations
 Get the name of the user
