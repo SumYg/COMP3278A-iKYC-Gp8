@@ -1,4 +1,4 @@
-export default function StocKTable(props) {
+  export default function StocKTable(props) {
 
     var list = [];
     let i =0;
@@ -11,12 +11,11 @@ export default function StocKTable(props) {
             console.log(element)
             list.push(
                 
-                
-                // <tr id={i} key={i} className="record_row">
-                //     <td><div >{element[0]}</div></td>
-                //     <td><div >{element[1]}</div></td>
-                //     <td><div >{element[2]}</div></td>
-                // </tr>
+                <tr id={i} key={i} className="record_row">
+                    <td><div >{element[0]}</div></td>
+                    <td><div >{element[1]}</div></td>
+                    <td><div >{element[2]}</div></td>
+                </tr>
             )
             i += 1
         });
