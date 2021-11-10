@@ -251,11 +251,23 @@ def createStock(stock_name, live_price, percentage_change):
     mydb.commit()
     print("stock ", stock_name, " created" )
     
+
 def updateStock(stock_name, live_price, percentage_change):
     query = f"UPDATE Stock SET live_price = '{live_price}', percentage_change = '{percentage_change}' WHERE stock_name = '{stock_name}'"
     mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "stock record changed.")
+
+def getStock():
+    """
+    Return a json file of stock_name, live_price and precentage_change
+    """
+    query = f"SELECT * FROM Stock"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    mydb.commit()
+    #print(result)
+    return result
 
 #register("hhh","111")
 #insertLoginHistory("John")
