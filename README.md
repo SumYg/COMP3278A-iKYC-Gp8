@@ -3,7 +3,7 @@
 ## Build
 ### Windows
 
-Inside Anaconda or just the system environment with Visual Studio. It should be more easy to install in WSL.
+Inside Anaconda or just the system environment with Visual Studio. It should be eaiser to install in WSL.
 ```
 python -m pip install -r requirements.txt
 ```
