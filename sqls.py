@@ -264,7 +264,7 @@ def getStock():
     """
     query = f"SELECT * FROM Stock"
     mycursor.execute(query)
-    result = mycursor.fetchone()[0]
+    result = mycursor.fetchall()
     mydb.commit()
     #print(result)
     return result
