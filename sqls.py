@@ -310,5 +310,4 @@ USER_NAME = "edmund"
 #checkTransAmountFromSaving(getSavingAccount()[0], 1000)
 makeTransFromSaving("00000001", "00000007", 100)
 
-getStock(0)
-
+# getStock(0)
