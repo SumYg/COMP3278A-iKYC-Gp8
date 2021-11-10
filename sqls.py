@@ -257,7 +257,7 @@ def updateStock(stock_name, live_price, percentage_change):
     mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "stock record changed.")
-
+@sendTupleAsJSON
 def getStock():
     """
     Return a json file of stock_name, live_price and precentage_change
@@ -309,3 +309,6 @@ USER_NAME = "edmund"
 #getOwnerOfAccount("00000001")
 #checkTransAmountFromSaving(getSavingAccount()[0], 1000)
 makeTransFromSaving("00000001", "00000007", 100)
+
+getStock(0)
+
