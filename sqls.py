@@ -244,6 +244,18 @@ def getTransactionHistoryYM(accNo, year, month):
     mydb.commit()
     print(result)
     return result
+ 
+def createStock(stock_name, live_price, percentage_change):
+    query = f"INSERT INTO Stock VALUES('{stock_name}','{live_price}','{percentage_change}')"
+    mycursor.execute(query)
+    mydb.commit()
+    print("stock ", stock_name, " created" )
+    
+def updateStock(stock_name, live_price, percentage_change):
+    query = f"UPDATE Stock SET live_price = '{live_price}', percentage_change = '{percentage_change}' WHERE stock_name = '{stock_name}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "stock record changed.")
 
 #register("hhh","111")
 #insertLoginHistory("John")
