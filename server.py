@@ -305,6 +305,7 @@ if __name__ == "__main__":
     app.router.add_get("/getSaving", sqls.getSavingAccount)
     app.router.add_get("/getCredit", sqls.getCreditAccount)
     app.router.add_get("/getInvest", sqls.getInvestAccount)
+    app.router.add_get("/getStock", sqls.getStock)
 
     # app.router.add_post("/offer", offer)
     app.router.add_post("/check", check)
