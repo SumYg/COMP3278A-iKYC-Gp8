@@ -243,7 +243,6 @@ function StockPage(props) {
     <h1>Stock Page</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
-    {/* <div>{props.stock}</div> */}
     <table id='stock-table' >
       <tbody>
         <tr>
@@ -251,7 +250,7 @@ function StockPage(props) {
           <th>Price</th>
           <th>Percentage Change</th>
         </tr>
-      <StockPage records={props.stock} />
+      <StockTable records={props.stock} />
       </tbody>
     </table>
     
