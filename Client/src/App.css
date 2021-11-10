@@ -121,6 +121,7 @@ label {
   /* border-color: rgba(255, 140, 0, 0.267); */
   border-width: 5px;
   border-style: dotted;
+  max-height: 70%;
 }
 #home-page {
   width: 50%;
