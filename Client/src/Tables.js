@@ -3,7 +3,7 @@ export default function ArrayRecords(props) {
     let i =0;
     // console.log("=====",props.records)
     let data = props.records
-    if (data != undefined) {
+    if (data !== undefined) {
         data.forEach(element => {
             // let id = element[0]
             // element = element[1]
