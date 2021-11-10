@@ -170,8 +170,11 @@ function BackToHomeButton(props) {
 }
 function TransactionPage(props){
   let buttons;
-  if (props.currentAcc == 'saving') {
-    buttons = [<TransButton setMainState={props.setMainState} text='External' state='external'/>, <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>]
+  if (props.currentAcc === 'saving') {
+    buttons = <React.Fragment>
+    <TransButton setMainState={props.setMainState} text='External' state='external'/>
+    <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
+    </React.Fragment>
   } else {
     buttons = <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
   }
