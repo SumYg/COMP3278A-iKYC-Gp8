@@ -1,5 +1,6 @@
 import mysql.connector
 import datetime
+from server import sendTupleAsJSON
 
 mydb = mysql.connector.connect(
   host="sophia.cs.hku.hk",
@@ -111,6 +112,7 @@ def createCreditAccount(username, available=0, remaining=0):
     mycursor.execute(query)
     mydb.commit()
     
+@sendTupleAsJSON
 def getSavingAccount():
     """
     Return info of user.saving account
@@ -121,18 +123,20 @@ def getSavingAccount():
     mydb.commit()
     print(result)
     return result
-    
+
+@sendTupleAsJSON
 def getCreditAccount():
     """
     Return info of user.credit account
     """
-    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
+    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.available_credit - C.remaining_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
     result = mycursor.fetchone()
     mydb.commit()
     print(result)
     return result
-    
+
+@sendTupleAsJSON
 def getInvestAccount():
     """
     Return account number, amount in table Investment 
@@ -143,7 +147,7 @@ def getInvestAccount():
     mydb.commit()
     print(result)
     return result
-    
+
 def getOwnerOfAccount(accNo):
     """
     Return username
@@ -262,8 +266,8 @@ USER_NAME = "edmund"
 #getTransactionHistory("00000001")
 #getAllInfo()()
 #getTransactionHistoryYMD("00000001", "2021", "11", "08")
-getTransactionHistoryYMD("00000001", "2021", "11")
-  
+getTransactionHistoryYMD("00000001", "2021", "11", '08')
+
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
