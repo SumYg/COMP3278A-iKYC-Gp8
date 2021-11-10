@@ -106,7 +106,7 @@ label {
   justify-content: center;
   align-items: center;
 }
-#login-page, #home-page, #account-page, #history-page, #stock-page,#transaction-page {
+#login-page, #home-page, #account-page, #history-page, #stock-page,#transaction-page, #external-page, #internal-page {
   height: fit-content;
   width: fit-content;
   display: flex;
