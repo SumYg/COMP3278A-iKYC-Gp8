@@ -116,6 +116,23 @@ class App extends React.Component {
       case 'transaction':
         body = <TransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc}/>
         break
+      case 'internal':
+        let currentData;
+        switch(this.state.currentAcc) {
+          case 'saving':
+            currentData = this.state.saving
+            break
+          case 'credit':
+            currentData = this.state.invest
+            break
+          default:
+            currentData = this.state.credit
+        }
+        body = <InternalTransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc} currentData={currentData}/>
+        break
+      case 'external':
+        body = <ExternalTransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc} currentData={this.state.saving}/>
+        break
       default:
         body = null
 
@@ -136,11 +153,41 @@ function BackToHomeButton(props) {
   return <button onClick={() => {props.setMainState('home')}}>Back To Home</button>
 }
 function TransactionPage(props){
+  let buttons;
+  if (props.currentAcc == 'saving') {
+    buttons = [<TransButton setMainState={props.setMainState} text='External' state='external'/>, <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>]
+  } else {
+    buttons = <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
+  }
   return <div id="transaction-page">
     <h1>TransactionPage</h1>
     {props.currentAcc}
+    {buttons}
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
+  </div>
+}
+function TransButton(props) {
+  return <button onClick={() => {props.setMainState(props.state)}} id={props.state}>{props.text}</button>
+}
+function InternalTransactionPage(props) {
+  console.log(props.currentAcc)
+  console.log(props.currentData)
+  return <div id='internal-page'>
+    <h1>Internal</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
+
+  </div>
+}
+function ExternalTransactionPage(props) {
+  console.log(props.currentAcc)
+  console.log(props.currentData)
+  return <div id='external-page'>
+    <h1>External</h1>
+    <BackToHomeButton setMainState={props.setMainState}/>
+    <LogoutButton />
+
   </div>
 }
 function AccountPage(props) {
@@ -152,9 +199,8 @@ function AccountPage(props) {
     <LogoutButton />
     <div>
       <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >Balance:{props.credit[3]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >debt:{props.credit[3]}</span></div></button>
       <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
-      
     </div>
   </div>
 }
