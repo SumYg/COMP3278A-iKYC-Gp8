@@ -106,6 +106,12 @@ def sendDictAsJSON(func):
         return web.json_response(func(request))
     return inner
 
+def sendTupleAsJSON(func):
+    def inner(request):
+        return web.json_response({"data": func()})
+    return inner
+
+
 def getPostData(func):
     async def inner(request):
         post_data = await request.json()
@@ -296,6 +302,10 @@ if __name__ == "__main__":
     app.router.add_get("/test", sqlconnector.selection)
     app.router.add_get("/myInfo", show_info)
     app.router.add_get("/allInfo", show_all_info)
+    app.router.add_get("/getSaving", sqls.getSavingAccount)
+    app.router.add_get("/getCredit", sqls.getCreditAccount)
+    app.router.add_get("/getInvest", sqls.getInvestAccount)
+
     # app.router.add_post("/offer", offer)
     app.router.add_post("/check", check)
     app.router.add_post("/register", register)
@@ -303,6 +313,7 @@ if __name__ == "__main__":
     app.router.add_post("/password_login", password_login)
     app.router.add_post("/login", login)
     app.router.add_post("/test2", test2)
+
 
     # Configure default CORS settings.
     cors = aiohttp_cors.setup(app, defaults={
