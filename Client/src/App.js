@@ -5,6 +5,8 @@ import {RTC2server} from "./RTCserver_connection.js"
 import profilepic from './profilepic.png';
 import creditcard from './creditcard.png';
 import ArrayRecords from './Tables.js'
+import StockTable from './stock.js'
+
 const pyServerAddress = 'http://localhost:8080/'
 
 class App extends React.Component {
@@ -18,7 +20,8 @@ class App extends React.Component {
       pageState: 'login',
       saving: ["HKD",123],
       invest: ["12312",123,"",""],
-      credit: ["123123",123]
+      credit: ["123123",123],
+      stock:[[]]
       // username: 'A',
       // current: 'BC',
     }
@@ -75,6 +78,18 @@ class App extends React.Component {
           }
         })
       break
+      case 'stock':
+        fetch(pyServerAddress + 'getStock').then(response => {
+          if (response.status === 200) {
+            response.json().then( res => {
+              console.log(res)
+              this.setState({'stock': res['data']})
+            })
+          } else {
+            alert("Server return status "+response.status)
+          }
+        })
+      break
       default:  // do nothing
     }
     this.setState({pageState: state})
@@ -111,7 +126,7 @@ class App extends React.Component {
         body = <HistoryPage setMainState={this.setMainState} historyData={this.state.historyData}/>
         break
       case 'stock':
-        body = <StockPage setMainState={this.setMainState}/>
+        body = <StockPage setMainState={this.setMainState} stock={this.state.stock}/>
         break
       case 'transaction':
         body = <TransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc}/>
@@ -133,6 +148,7 @@ class App extends React.Component {
       case 'external':
         body = <ExternalTransactionPage setMainState={this.setMainState} currentAcc={this.state.currentAcc} currentData={this.state.saving}/>
         break
+      
       default:
         body = null
 
@@ -227,6 +243,17 @@ function StockPage(props) {
     <h1>Stock Page</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
+    {/* <div>{props.stock}</div> */}
+    <table id='stock-table' >
+      <tbody>
+        <tr>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>Percentage Change</th>
+        </tr>
+      <StockPage records={props.stock} />
+      </tbody>
+    </table>
     
   </div>
 }
