@@ -207,7 +207,7 @@ def makeTransFromSaving(from_acc, to_acc, amount):
         return True
     return False
 
-  def updateInternalAccountFromS(accNo, trans_amount, fromOrTo):
+def updateInternalAccountFromS(accNo, trans_amount, fromOrTo):
     """
     fromOrTo == 0 -> update from_account
     fromOrTo == 1 -> update to_account
