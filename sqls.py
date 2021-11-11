@@ -207,6 +207,62 @@ def makeTransFromSaving(from_acc, to_acc, amount):
         return True
     return False
 
+  def updateInternalAccountFromS(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Saving SET amount = amount-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Investment SET amount = amount+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")
+    
+def updateInternalAccountFromI(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Investment SET amount = amount-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Saving SET amount = amount+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")    
+    
+def internalTransFromSavingToInvest(amount):
+    from_acc=getSavingAccount()[0]
+    to_acc=getInvestAccount()[0]
+    if (checkTransAmountFromSaving(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromS(from_acc, amount, 0)
+        updateInternalAccountFromS(to_acc, amount, 1)
+    else:
+        return -1
+        
+def internalTransFromInvestToSaving(amount):
+    to_acc=getSavingAccount()[0]
+    from_acc=getInvestAccount()[0]
+    
+    trans_id = str(countTrans()+1).zfill(10)
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record inserted to Transaction.")
+    updateInternalAccountFromI(from_acc, amount, 0)
+    updateInternalAccountFromI(to_acc, amount, 1)
+
 @getPostList
 @sendDictAsJSON
 def getTransactionHistory(accNo):
