@@ -1,6 +1,6 @@
 import mysql.connector
 import datetime
-from server import sendTupleAsJSON
+from server import sendTupleAsJSON, getPostList, sendDictAsJSON
 
 mydb = mysql.connector.connect(
   host="sophia.cs.hku.hk",
@@ -191,6 +191,8 @@ def updateAccount(accNo, trans_amount, fromOrTo):
     mydb.commit()
     print(mycursor.rowcount, "record changed.")
 
+@getPostList
+@sendDictAsJSON
 def makeTransFromSaving(from_acc, to_acc, amount):
     if (checkTransAmountFromSaving(from_acc, amount)):
         trans_id = str(countTrans()+1).zfill(10)
@@ -202,15 +204,18 @@ def makeTransFromSaving(from_acc, to_acc, amount):
         print(mycursor.rowcount, "record inserted to Transaction.")
         updateAccount(from_acc, amount, 0)
         updateAccount(to_acc, amount, 1)
-    else:
-        return -1
-      
+        return True
+    return False
+
+@getPostList
+@sendDictAsJSON
 def getTransactionHistory(accNo):
     """
     get transaction history related to the given account
     return 2d list
     """
-    query = f"SELECT * FROM Transaction WHERE from_account = '{accNo}' OR to_account = '{accNo}'"
+    print(accNo)
+    query = f"SELECT * FROM Transaction WHERE from_account = '{accNo}' OR to_account = '{accNo}' ORDER BY date DESC, time DESC, amount DESC"
     mycursor.execute(query)
     result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
     mydb.commit()
@@ -269,6 +274,17 @@ def getStock():
     #print(result)
     return result
 
+def getRealTimeStock():
+    """
+    Return a json file of stock_name, live_price and precentage_change
+    """
+    query = f"SELECT * FROM Stock"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    mydb.commit()
+    #print(result)
+    return result
+
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
@@ -308,6 +324,6 @@ USER_NAME = "edmund"
 #getInvestAccount()
 #getOwnerOfAccount("00000001")
 #checkTransAmountFromSaving(getSavingAccount()[0], 1000)
-makeTransFromSaving("00000001", "00000007", 100)
+# makeTransFromSaving("00000001", "00000007", 100)
 
 # getStock(0)
