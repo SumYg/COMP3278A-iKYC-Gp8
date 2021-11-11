@@ -1,15 +1,16 @@
 export default function ArrayRecords(props) {
     var list = [];
     let i =0;
-    // console.log("=====",props.records)
+    console.log("=====",props.records)
     let data = props.records
     if (data !== undefined) {
         data.forEach(element => {
             // let id = element[0]
             // element = element[1]
+            console.log(i)
             list.push(
                 <tr id={i} key={i} className="record_row">
-                    <Array2Td records={element}/>
+                    <Array2Td records={element} rowNo={i}/>
                 </tr>
             )
             i += 1
@@ -29,8 +30,9 @@ const Array2Td = (props) => {
             data.forEach(element => {
                 // let id = element[0]
                 // element = element[1]
+                // console.log(props.rowNo+'a'+i)
                 list.push(
-                    <td><div id={i} key={i}>{element}</div></td>
+                    <td key={props.rowNo+'td'+i}><div key={props.rowNo+'div'+i}>{element}</div></td>
                 )
                 i += 1
             });
