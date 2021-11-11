@@ -102,8 +102,8 @@ async def javascript(request, file):
     return web.Response(content_type="application/javascript", text=content)
 
 def sendDictAsJSON(func):
-    def inner(request):
-        return web.json_response(func(request))
+    def inner(*request):
+        return web.json_response(func(*request))
     return inner
 
 def sendTupleAsJSON(func):
@@ -111,6 +111,12 @@ def sendTupleAsJSON(func):
         return web.json_response({"data": func()})
     return inner
 
+def getPostList(func):
+    async def inner(request):
+        post_data = await request.json()
+        print(post_data)
+        return func(*post_data)
+    return inner
 
 def getPostData(func):
     async def inner(request):
@@ -118,6 +124,12 @@ def getPostData(func):
         print(post_data)
         return func(post_data)
     return inner
+
+@getPostList
+@sendDictAsJSON
+def listTest(d1, d2, d3):
+    print(d1, d2, d3)
+    return True
 
 @sendDictAsJSON
 def show_info(request):
@@ -314,7 +326,9 @@ if __name__ == "__main__":
     app.router.add_post("/password_login", password_login)
     app.router.add_post("/login", login)
     app.router.add_post("/test2", test2)
-
+    app.router.add_post('/list', listTest)
+    app.router.add_post('/external', sqls.makeTransFromSaving)
+    app.router.add_post("/getTransHis", sqls.getTransactionHistory)
 
     # Configure default CORS settings.
     cors = aiohttp_cors.setup(app, defaults={
@@ -330,4 +344,3 @@ if __name__ == "__main__":
         cors.add(route)
 
     web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
-
