@@ -5,7 +5,7 @@ import {RTC2server} from "./RTCserver_connection.js"
 import profilepic from './profilepic.png';
 import creditcard from './creditcard.png';
 import ArrayRecords from './Tables.js'
-import StockTable from './stock.js'
+import RealTimeStockTable from './stock.js'
 
 const pyServerAddress = 'http://localhost:8080/'
 
@@ -39,7 +39,7 @@ class App extends React.Component {
           if (response.status === 200) {
             response.json().then( res => {
               console.log(res)
-              this.setState({'historyData': res['data']})
+              this.setState({'historyData': res['data'], pageState: state})
             })
           } else {
             alert("Server return status "+response.status)
@@ -51,7 +51,7 @@ class App extends React.Component {
           if (response.status === 200) {
             response.json().then( res => {
               console.log(res)
-              this.setState({'saving': res['data']})
+              this.setState({'saving': res['data'], pageState: state})
             })
           } else {
             alert("Server return status "+response.status)
@@ -61,7 +61,7 @@ class App extends React.Component {
           if (response.status === 200) {
             response.json().then( res => {
               console.log(res)
-              this.setState({'credit': res['data']})
+              this.setState({'credit': res['data'], pageState: state})
             })
           } else {
             alert("Server return status "+response.status)
@@ -71,7 +71,7 @@ class App extends React.Component {
           if (response.status === 200) {
             response.json().then( res => {
               console.log(res)
-              this.setState({'invest': res['data']})
+              this.setState({'invest': res['data'], pageState: state})
             })
           } else {
             alert("Server return status "+response.status)
@@ -83,16 +83,16 @@ class App extends React.Component {
           if (response.status === 200) {
             response.json().then( res => {
               console.log(res)
-              this.setState({'stock': res['data']})
+              this.setState({'stock': res['data'], pageState: state})
             })
           } else {
             alert("Server return status "+response.status)
           }
         })
-      break
+      break 
       default:  // do nothing
-    }
-    this.setState({pageState: state})
+      this.setState({pageState: state})
+  }
   }
   change2Home() {
     fetch(pyServerAddress + 'myInfo').then(response => {
@@ -100,12 +100,12 @@ class App extends React.Component {
         response.json().then( res => {
           console.log(res)
           this.setState(res)
+          this.setMainState('home')
         })
       } else {
         alert("Server return status "+response.status)
       }
     })
-    this.setMainState('home')
   }
   
   
@@ -253,7 +253,7 @@ function StockPage(props) {
           <th>Price</th>
           <th>Percentage Change</th>
         </tr>
-      <StockTable records={props.stock} />
+      <RealTimeStockTable records={props.stock} />
       </tbody>
     </table>
     
