@@ -468,8 +468,8 @@ def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
     print(result)
     return result  
   
-#@getPostList
-#@sendDictAsJSON    
+@getPostList
+@sendDictAsJSON    
 def getTransactionHistoryAmount(accNo, amount1, amount2):
     """
     get transaction history related to the given account
