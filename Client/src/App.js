@@ -314,8 +314,8 @@ function InternalTransactionPage(props) {
         alert("Server return status "+response.status)
       }
     })
-    
-    
+
+
   }
   return <div id='internal-page'>
     <h1>Internal</h1>
@@ -395,7 +395,7 @@ function AccountPage(props) {
     <LogoutButton />
     <div>
       <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >Balance:{props.credit[2]-props.credit[1]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit <span >Balance:{props.credit[2]-props.credit[1]}</span></div></button>
       <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
     </div>
   </div>
@@ -423,17 +423,20 @@ function StockPage(props) {
     <h1>Stock Page</h1>
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
+    <div id='stock-table-div'>
     <table id='stock-table' >
       <tbody>
         <tr>
           <th>Stock</th>
           <th>Price</th>
-          <th>Percentage Change</th>
+          <th>% Change</th>
+          <th>Owned share</th>
+          <th>Action</th>
         </tr>
       <RealTimeStockTable records={props.stock} />
       </tbody>
     </table>
-    
+    </div>
   </div>
 }
 
