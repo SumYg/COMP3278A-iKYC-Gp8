@@ -287,6 +287,36 @@ function InternalTransactionPage(props) {
       break
 
   }
+  function internaltrans(e){
+    e.preventDefault();
+    let amount = parseFloat(document.getElementById("amount").value);
+    console.log(amount)
+    let inttoAccount=document.getElementById("inttoAccount").value;
+    let intfromAccount=props.currentAcc;
+    let serverfunction="int"+intfromAccount+"to"+inttoAccount;
+    console.log(serverfunction)
+    fetch(pyServerAddress + serverfunction, {
+      method: "POST",
+      body: JSON.stringify([amount])
+    }).then( response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          if (res!=-1) {
+            alert("Transaction Succeed")
+            props.setMainState('account')
+            // props.change2Home()
+          } else {
+            alert("Please check the amount")
+          }
+        })
+      } else {
+        alert("Server return status "+response.status)
+      }
+    })
+    
+    
+  }
   return <div id='internal-page'>
     <h1>Internal</h1>
     <BackToAccountButton setMainState={props.setMainState}/>
@@ -303,7 +333,7 @@ function InternalTransactionPage(props) {
       <input name='amount' id='amount' required></input>
       </p>
       <p>
-      <button onClick={(e)=>{e.preventDefault()}}>Submit</button>
+      <button onClick={internaltrans}>Submit</button>
       </p>
     </form>
 
@@ -365,7 +395,7 @@ function AccountPage(props) {
     <LogoutButton />
     <div>
       <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >debt:{props.credit[3]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit  <span >Balance:{props.credit[2]-props.credit[1]}</span></div></button>
       <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
     </div>
   </div>
