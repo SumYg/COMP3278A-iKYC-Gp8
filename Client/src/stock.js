@@ -67,7 +67,7 @@ function Action(props) {
             if (response.status === 200) {
               response.json().then( res => {
                 if (res) {
-                    alert('Updated Position')
+                    alert('Updated')
                     setState('show')
                 } else {
                     alert('Please check your input')
