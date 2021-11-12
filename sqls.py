@@ -413,7 +413,7 @@ def getStock():
     """
     Return a json file of stock_name, live_price and precentage_change
     """
-    query = f"SELECT * FROM Stock"
+    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name"
     mycursor.execute(query)
     result = mycursor.fetchall()
     mydb.commit()
