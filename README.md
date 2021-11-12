@@ -24,6 +24,7 @@ Then open http://localhost:8080 in browser
 - [x] Redirect/Change to the Home Page after the model is trained
 - [x] Home Page
 - [ ] Transaction Page
+- [ ] total_spend
 
 ## Some Screenshots and Explanations
 Get the name of the user
