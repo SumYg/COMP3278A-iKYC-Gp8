@@ -256,7 +256,9 @@ def updateInternalAccountFromI(accNo, trans_amount, fromOrTo):
     mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "record changed.")    
-    
+   
+@getPostList
+@sendDictAsJSON   
 def internalTransFromSavingToInvest(amount):
     from_acc=getSavingAccount()[0]
     to_acc=getInvestAccount()[0]
@@ -273,7 +275,9 @@ def internalTransFromSavingToInvest(amount):
     else:
         print("no enough amount in your saving account")
         return -1
-        
+
+@getPostList
+@sendDictAsJSON        
 def internalTransFromInvestToSaving(amount):
     to_acc=getSavingAccount()[0]
     from_acc=getInvestAccount()[0]
@@ -317,7 +321,9 @@ def updateInternalAccountFromCToS(accNo, trans_amount, fromOrTo):
     mycursor.execute(query)
     mydb.commit()
     print(mycursor.rowcount, "record changed.")    
-    
+
+@getPostList
+@sendDictAsJSON    
 def internalTransFromSavingToCredit(amount):
     from_acc=getSavingAccount()[0]
     to_acc=getCreditAccount()[0]
@@ -334,7 +340,9 @@ def internalTransFromSavingToCredit(amount):
     else:
         print("no enough amount in your saving account")
         return -1
-        
+
+@getPostList
+@sendDictAsJSON        
 def internalTransFromCreditToSaving(amount):
     to_acc=getSavingAccount()[0]
     from_acc=getCreditAccount()[0]
@@ -349,6 +357,72 @@ def internalTransFromCreditToSaving(amount):
         print(mycursor.rowcount, "record inserted to Transaction.")
         updateInternalAccountFromCToS(from_acc, amount, 0)
         updateInternalAccountFromCToS(to_acc, amount, 1)
+    else:
+        print("no enough credit in your credit account!")
+        return -1
+        
+    
+def updateInternalAccountFromIToC(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Investment SET amount = amount-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Credit SET remaining_credit = remaining_credit+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")
+    
+def updateInternalAccountFromCToI(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Credit SET remaining_credit = remaining_credit-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Investment SET amount = amount+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")    
+
+@getPostList
+@sendDictAsJSON    
+def internalTransFromIToC(amount):
+    from_acc=getInvestAccount()[0]
+    to_acc=getCreditAccount()[0]
+    if (checkTransAmountFromInvest(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromIToC(from_acc, amount, 0)
+        updateInternalAccountFromIToC(to_acc, amount, 1)
+    else:
+        print("no enough amount in your saving account")
+        return -1
+ 
+@getPostList
+@sendDictAsJSON 
+def internalTransFromCToI(amount):
+    to_acc=getInvestAccount()[0]
+    from_acc=getCreditAccount()[0]
+    
+    if(checkTransAmountFromCredit(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromCToI(from_acc, amount, 0)
+        updateInternalAccountFromCToI(to_acc, amount, 1)
     else:
         print("no enough credit in your credit account!")
         return -1
