@@ -489,12 +489,17 @@ def getStock():
     """
     Return a json file of stock_name, live_price and precentage_change
     """
-    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name"
+    query1 = f"SELECT I.account_number FROM Account A, Investment I WHERE A.account_number = I.account_number AND A.username = '{USER_NAME}'"
+    mycursor.execute(query1)
+    temp = mycursor.fetchall()
+    mydb.commit()
+
+    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name and account_number = '{temp[0][0]}' ORDER BY stock_name ASC"
     mycursor.execute(query)
     result = mycursor.fetchall()
     mydb.commit()
     #print(result)
-    return result
+    return result 
 
 def getRealTimeStock():
     """
@@ -506,7 +511,47 @@ def getRealTimeStock():
     mydb.commit()
     #print(result)
     return result
+@getPostList
+@sendDictAsJSON
+def updatePosition(stock_name, no_shares, conditon):
+    """
+    condition = "Buy" or "Sell"
+    return False if the users investment account dont have enough funds
+    """
+    query1 = f"SELECT I.account_number FROM Account A, Investment I WHERE A.account_number = I.account_number AND A.username = '{USER_NAME}'"
+    mycursor.execute(query1)
+    temp = mycursor.fetchall()
+    mydb.commit()
 
+    if (conditon == "Buy"):
+        query2 = f"SELECT (I.amount-'{no_shares}'* S.live_price) from Stock S, Investment I WHERE S.stock_name = '{stock_name}' and I.account_number = '{temp[0][0]}' and I.amount >= '{no_shares}'* S.live_price"
+        mycursor.execute(query2)
+        result = mycursor.fetchall()
+        mydb.commit()
+        if not result:
+            return False
+    if (conditon == "Sell"):
+        query3 = f"SELECT (I.amount + ('{no_shares}'* S.live_price)) FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and '{no_shares}' <= T.no_shares and I.account_number = '{temp[0][0]}'"
+        mycursor.execute(query3)
+        result = mycursor.fetchall()
+        mydb.commit()
+        if not result:
+            return False
+
+    symbol = '+' if conditon == "Buy" else '-'
+
+    query4 = f"UPDATE Investment SET amount = '{result[0][0]}' WHERE account_number = '{temp[0][0]}'"
+    mycursor.execute(query4)
+    mydb.commit()
+    stock_name, temp[0][0]
+
+    query5 = f"INSERT INTO Trade VALUES('{stock_name}', '{temp[0][0]}', {no_shares}) ON DUPLICATE KEY UPDATE no_shares= no_shares {symbol} {no_shares}"
+
+    # query5 = f"UPDATE Trade SET no_shares = no_shares {symbol} '{no_shares}' WHERE account_number = '{temp[0][0]}' AND stock_name = '{stock_name}'"
+    mycursor.execute(query5)
+    mydb.commit()
+    print(temp[0][0],"Investment account updated")
+    return True
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
