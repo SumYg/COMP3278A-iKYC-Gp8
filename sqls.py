@@ -170,6 +170,30 @@ def checkTransAmountFromSaving(accNo, amount):
     mydb.commit()
     #print(result >= amount)
     return (result >= amount)
+    
+def checkTransAmountFromInvest(accNo, amount):
+    """
+    check whether the amount in saving can complete the transaction 
+    return true/false 
+    """
+    query = f"SELECT amount FROM Investment WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    mydb.commit()
+    #print(result >= amount)
+    return (result >= amount)
+    
+def checkTransAmountFromCredit(accNo, amount):
+    """
+    check whether the amount in saving can complete the transaction 
+    return true/false 
+    """
+    query = f"SELECT remaining_credit FROM Credit WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    result = mycursor.fetchone()[0]
+    mydb.commit()
+    #print(result >= amount)
+    return (result >= amount)
 
 def countTrans():
     query = f"SELECT COUNT(*) FROM Transaction"
@@ -247,21 +271,87 @@ def internalTransFromSavingToInvest(amount):
         updateInternalAccountFromS(from_acc, amount, 0)
         updateInternalAccountFromS(to_acc, amount, 1)
     else:
+        print("no enough amount in your saving account")
         return -1
         
 def internalTransFromInvestToSaving(amount):
     to_acc=getSavingAccount()[0]
     from_acc=getInvestAccount()[0]
     
-    trans_id = str(countTrans()+1).zfill(10)
-    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-    current_time = datetime.datetime.now().strftime("%H:%M:%S")
-    query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+    if(checkTransAmountFromInvest(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromI(from_acc, amount, 0)
+        updateInternalAccountFromI(to_acc, amount, 1)
+    else:
+        print("no enough amount in your investment account!")
+        return -1
+    
+def updateInternalAccountFromSToC(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Saving SET amount = amount-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Credit SET remaining_credit = remaining_credit+'{trans_amount}' WHERE account_number = '{accNo}'"
     mycursor.execute(query)
     mydb.commit()
-    print(mycursor.rowcount, "record inserted to Transaction.")
-    updateInternalAccountFromI(from_acc, amount, 0)
-    updateInternalAccountFromI(to_acc, amount, 1)
+    print(mycursor.rowcount, "record changed.")
+    
+def updateInternalAccountFromCToS(accNo, trans_amount, fromOrTo):
+    """
+    fromOrTo == 0 -> update from_account
+    fromOrTo == 1 -> update to_account
+    """
+    if fromOrTo == 0:
+        query = f"UPDATE Credit SET remaining_credit = remaining_credit-'{trans_amount}' WHERE account_number = '{accNo}'"
+    elif fromOrTo == 1:
+        query = f"UPDATE Saving SET amount = amount+'{trans_amount}' WHERE account_number = '{accNo}'"
+    mycursor.execute(query)
+    mydb.commit()
+    print(mycursor.rowcount, "record changed.")    
+    
+def internalTransFromSavingToCredit(amount):
+    from_acc=getSavingAccount()[0]
+    to_acc=getCreditAccount()[0]
+    if (checkTransAmountFromSaving(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromSToC(from_acc, amount, 0)
+        updateInternalAccountFromSToC(to_acc, amount, 1)
+    else:
+        print("no enough amount in your saving account")
+        return -1
+        
+def internalTransFromCreditToSaving(amount):
+    to_acc=getSavingAccount()[0]
+    from_acc=getCreditAccount()[0]
+    
+    if(checkTransAmountFromCredit(from_acc, amount)):
+        trans_id = str(countTrans()+1).zfill(10)
+        current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        query = f"INSERT INTO Transaction VALUES('{trans_id}', '{amount}', '{current_time}', '{current_date}', '{from_acc}', '{to_acc}')"
+        mycursor.execute(query)
+        mydb.commit()
+        print(mycursor.rowcount, "record inserted to Transaction.")
+        updateInternalAccountFromCToS(from_acc, amount, 0)
+        updateInternalAccountFromCToS(to_acc, amount, 1)
+    else:
+        print("no enough credit in your credit account!")
+        return -1
 
 @getPostList
 @sendDictAsJSON
@@ -362,7 +452,7 @@ USER_NAME = "edmund"
 #getTransactionHistory("00000001")
 #getAllInfo()()
 #getTransactionHistoryYMD("00000001", "2021", "11", "08")
-getTransactionHistoryYMD("00000001", "2021", "11", '08')
+#getTransactionHistoryYMD("00000001", "2021", "11", '08')
 
 #register("hhh","111")
 #insertLoginHistory("John")
@@ -383,3 +473,8 @@ USER_NAME = "edmund"
 # makeTransFromSaving("00000001", "00000007", 100)
 
 # getStock(0)
+#buyStock("AAPL", 2)
+#internalTransFromSavingToCredit(10000)
+#internalTransFromCreditToSaving(10000)
+#internalTransFromSavingToInvest(5000)
+internalTransFromInvestToSaving(5000)
