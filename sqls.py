@@ -429,8 +429,6 @@ def internalTransFromCToI(amount):
         print("no enough credit in your credit account!")
         return -1
 
-@getPostList
-@sendDictAsJSON
 def getTransactionHistory(accNo):
     """
     get transaction history related to the given account
@@ -443,9 +441,7 @@ def getTransactionHistory(accNo):
     mydb.commit()
     print(result)
     return result
- 
-@getPostList
-@sendDictAsJSON  
+  
 def getTransactionHistoryDate(accNo, date1, date2):
     query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}')"
     mycursor.execute(query)
@@ -455,8 +451,6 @@ def getTransactionHistoryDate(accNo, date1, date2):
     print(result)
     return result
 
-@getPostList
-@sendDictAsJSON  
 def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
     time1 = f"{time1}00"
     time2 = f"{time2}59"
@@ -468,8 +462,7 @@ def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
     print(result)
     return result  
   
-@getPostList
-@sendDictAsJSON    
+ 
 def getTransactionHistoryAmount(accNo, amount1, amount2):
     """
     get transaction history related to the given account
@@ -483,9 +476,7 @@ def getTransactionHistoryAmount(accNo, amount1, amount2):
     mydb.commit()
     print(result)
     return result
-  
-@getPostList
-@sendDictAsJSON    
+    
 def getTransactionHistoryAmountDate(accNo, amount1, amount2, date1, date2):
     query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (amount >= '{amount1}' AND amount <= '{amount2}') AND (date >= '{date1}' AND date <= '{date2}')"
     mycursor.execute(query)
