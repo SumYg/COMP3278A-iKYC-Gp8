@@ -462,6 +462,24 @@ def getTransactionHistoryDate(accNo, date1, date2):
     print(result)
     return result
 
+@getPostList
+@sendDictAsJSON  
+def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
+    """
+    get transaction history related to the given account
+    in a given year, month and date e.g. 20211107
+    return 2d list
+    """
+    time1 = f"{time1}00"
+    time2 = f"{time2}59"
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}') AND (time >= '{time1}' AND time <= '{time2}')"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result  
+  
 #@getPostList
 #@sendDictAsJSON    
 def getTransactionHistoryAmount(accNo, amount1, amount2):
