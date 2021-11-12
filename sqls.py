@@ -447,13 +447,6 @@ def getTransactionHistory(accNo):
 @getPostList
 @sendDictAsJSON  
 def getTransactionHistoryDate(accNo, date1, date2):
-    """
-    get transaction history related to the given account
-    in a given year, month and date e.g. 20211107
-    return 2d list
-    """
-    date1 = f"{date1}"
-    date2 = f"{date2}"
     query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}')"
     mycursor.execute(query)
     result = mycursor.fetchall()
@@ -465,11 +458,6 @@ def getTransactionHistoryDate(accNo, date1, date2):
 @getPostList
 @sendDictAsJSON  
 def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
-    """
-    get transaction history related to the given account
-    in a given year, month and date e.g. 20211107
-    return 2d list
-    """
     time1 = f"{time1}00"
     time2 = f"{time2}59"
     query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}') AND (time >= '{time1}' AND time <= '{time2}')"
@@ -495,6 +483,17 @@ def getTransactionHistoryAmount(accNo, amount1, amount2):
     mydb.commit()
     print(result)
     return result
+  
+@getPostList
+@sendDictAsJSON    
+def getTransactionHistoryAmountDate(accNo, amount1, amount2, date1, date2):
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (amount >= '{amount1}' AND amount <= '{amount2}') AND (date >= '{date1}' AND date <= '{date2}')"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result  
 
 def createStock(stock_name, live_price, percentage_change):
     query = f"INSERT INTO Stock VALUES('{stock_name}','{live_price}','{percentage_change}')"
@@ -625,3 +624,4 @@ USER_NAME = "edmund"
 # internalTransFromInvestToSaving(5000)
 #getTransactionHistoryDate(getInvestAccount()[0], "20211101", "20211131")
 #getTransactionHistoryDateTime(getSavingAccount()[0], "20211112", "20211113", "1900", "2000")
+#getTransactionHistoryAmountDate(getSavingAccount()[0], "11", "100", "20211112", "20211113")
