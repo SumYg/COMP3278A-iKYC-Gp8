@@ -210,10 +210,50 @@ function TransactionPage(props){
   } else {
     buttons = <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
   }
+  function search(e) {
+    
+    
+  }
   return <div id="transaction-page">
     <h1>TransactionPage</h1>
     {props.currentAcc}
     {buttons}
+    <span id="transearch">
+    <table>
+      <tr>
+        <th>Transaction ID</th>
+        <th>Amount</th>
+        <th>Date:</th>
+        <th>Time(h)</th>
+        <th>From Account</th>
+        <th>To Account</th>
+      </tr>
+      <tr>
+      <td><input name="transactionid" id="transactionid"></input></td>
+      <td>
+      <div><input name="amountfrom" id="amountfrom" placeholder="From"></input></div>
+      <div><input name="amountto" id="amountto" placeholder="To"></input></div>
+      </td>
+      <td>
+      <div><input name="datefrom" id="datefrom" placeholder="From" onFocus={(e)=>e.target.type='date'} onBlur={(e)=>e.target.type='text'}></input></div>
+      <div><input name="dateto" id="dateto" placeholder="To" onFocus={(e)=>e.target.type='date'} onBlur={(e)=>e.target.type='text'}></input></div>
+      </td>
+      <td>
+        <div><input name="hourfrom" id="hourfrom" placeholder="From"></input></div>
+        <div><input name="hourto" id="hourto" placeholder="To"></input></div>
+      </td>
+      <td>
+        <input name="fromAccount" id="fromAccount"></input>
+      </td>
+      <td>
+        <input name="toAccount" id="toAccount"></input>
+      </td>
+      </tr>
+     
+    </table>
+    </span>
+    <br />
+    <button onClick={search}>Search</button>
     <TransactionHistoryTable accNo={currentNo}/>
     <BackToAccountButton setMainState={props.setMainState}/>
     <LogoutButton />
