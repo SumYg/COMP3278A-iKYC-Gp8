@@ -650,3 +650,5 @@ USER_NAME = "edmund"
 #internalTransFromCreditToSaving(10000)
 #internalTransFromSavingToInvest(5000)
 # internalTransFromInvestToSaving(5000)
+#getTransactionHistoryYMDT(getSavingAccount()[0], "2021", "11", "12", "19", "19")
+#getTransactionHistoryAmount(getSavingAccount()[0], 1, 10)
