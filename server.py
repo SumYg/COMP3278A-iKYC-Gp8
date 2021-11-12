@@ -107,7 +107,9 @@ def sendDictAsJSON(func):
     return inner
 
 def sendTupleAsJSON(func):
-    def inner(request):
+    def inner(request=""):
+        if(request==""):
+            return func()
         return web.json_response({"data": func()})
     return inner
 
@@ -328,8 +330,15 @@ if __name__ == "__main__":
     app.router.add_post("/test2", test2)
     app.router.add_post('/list', listTest)
     app.router.add_post('/external', sqls.makeTransFromSaving)
-    app.router.add_post("/getTransHis", sqls.getTransactionHistory)
-
+    app.router.add_post("/getTransHis", sqls.getTransactionHistory) 
+    app.router.add_post('/intsavingtoinvest', sqls.internalTransFromSavingToInvest)
+    app.router.add_post('/intinvesttosaving', sqls.internalTransFromInvestToSaving)
+    #change sqls function
+    app.router.add_post('/intsavingtocredit', sqls.internalTransFromSavingToCredit)
+    app.router.add_post('/intinvesttocredit', sqls.internalTransFromIToC)
+    app.router.add_post('/intcredittosaving', sqls.internalTransFromCreditToSaving)
+    app.router.add_post('/intcredittoinvest', sqls.internalTransFromCToI)
+    
     # Configure default CORS settings.
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(

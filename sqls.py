@@ -124,6 +124,8 @@ def getSavingAccount():
     print(result)
     return result
 
+
+
 @sendTupleAsJSON
 def getCreditAccount():
     """
@@ -551,4 +553,4 @@ USER_NAME = "edmund"
 #internalTransFromSavingToCredit(10000)
 #internalTransFromCreditToSaving(10000)
 #internalTransFromSavingToInvest(5000)
-internalTransFromInvestToSaving(5000)
+# internalTransFromInvestToSaving(5000)
