@@ -472,6 +472,57 @@ def getTransactionHistoryYM(accNo, year, month):
     print(result)
     return result
  
+#@getPostList
+#@sendDictAsJSON    
+def getTransactionHistoryYMD(accNo, year, month, day):
+    """
+    get transaction history related to the given account
+    in a given year, month and date e.g. 20211107
+    return 2d list
+    """
+    date = f"{year}{month}{day}"
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND date = '{date}'"
+    mycursor.execute(query)
+    result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+
+#@getPostList
+#@sendDictAsJSON    
+def getTransactionHistoryYMDT(accNo, year, month, day, hour1, hour2):
+    """
+    get transaction history related to the given account
+    in a given year, month and date e.g. 20211107
+    return 2d list
+    """
+    date = f"{year}{month}{day}"
+    hour_low = f"{hour1}:00:00"
+    hour_high = f"{hour2}:59:59"
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND date = '{date}' AND (time >= '{hour_low}' AND time <= '{hour_high}')"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+
+#@getPostList
+#@sendDictAsJSON    
+def getTransactionHistoryAmount(accNo, amount1, amount2):
+    """
+    get transaction history related to the given account
+    in a given year, month and date e.g. 20211107
+    return 2d list
+    """
+    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (amount >= '{amount1}' AND amount <= '{amount2}')"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
+    mydb.commit()
+    print(result)
+    return result
+
 def createStock(stock_name, live_price, percentage_change):
     query = f"INSERT INTO Stock VALUES('{stock_name}','{live_price}','{percentage_change}')"
     mycursor.execute(query)
