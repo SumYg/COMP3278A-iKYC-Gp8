@@ -431,66 +431,33 @@ def internalTransFromCToI(amount):
 
 @getPostList
 @sendDictAsJSON
-def getTransactionHistory(accNo):
+def getTransactionHistory(accNo, date1, date2, time1, time2, amount1, amount2, fromA, toA):
     """
     get transaction history related to the given account
     return 2d list
     """
-    print(accNo)
-    query = f"SELECT * FROM Transaction WHERE from_account = '{accNo}' OR to_account = '{accNo}' ORDER BY date DESC, time DESC, amount DESC"
+    if (date1 == ''):
+        dateQ = ''
+    else:
+        dateQ = f" AND (date >= '{date1}' AND date <= '{date2}')"
+    if (time1 == ''):
+        timeQ = ''
+    else:
+        timeQ = f" AND (time >= '{time1}00' AND time <= '{time2}59')"
+    if (amount1 == ''):
+        amountQ = ''
+    else:
+        amountQ = f" AND (amount >= '{amount1}' AND amount <= '{amount2}')"
+    if (fromA == '' and toA == ''):
+        fromToQ = f"(from_account = '{accNo}' OR to_account = '{accNo}')"
+    else:
+        fromToQ = f"(from_account = '{accNo}' AND to_account = '{toA}') OR (from_account = '{fromA}' AND to_account = '{accNo}')"
+    query = f"SELECT * FROM Transaction WHERE {fromToQ}{dateQ}{timeQ}{amountQ} ORDER BY date DESC, time DESC, amount DESC"
     mycursor.execute(query)
     result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
     mydb.commit()
     print(result)
     return result
-@getPostList
-@sendDictAsJSON  
-def getTransactionHistoryDate(accNo, date1, date2):
-    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}')"
-    mycursor.execute(query)
-    result = mycursor.fetchall()
-    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
-    mydb.commit()
-    print(result)
-    return result
-@getPostList
-@sendDictAsJSON
-def getTransactionHistoryDateTime(accNo, date1, date2, time1, time2):
-    time1 = f"{time1}00"
-    time2 = f"{time2}59"
-    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (date >= '{date1}' AND date <= '{date2}') AND (time >= '{time1}' AND time <= '{time2}')"
-    mycursor.execute(query)
-    result = mycursor.fetchall()
-    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
-    mydb.commit()
-    print(result)
-    return result  
-  
-@getPostList
-@sendDictAsJSON
-def getTransactionHistoryAmount(accNo, amount1, amount2):
-    """
-    get transaction history related to the given account
-    in a given year, month and date e.g. 20211107
-    return 2d list
-    """
-    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (amount >= '{amount1}' AND amount <= '{amount2}')"
-    mycursor.execute(query)
-    result = mycursor.fetchall()
-    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
-    mydb.commit()
-    print(result)
-    return result
-@getPostList
-@sendDictAsJSON    
-def getTransactionHistoryAmountDate(accNo, amount1, amount2, date1, date2):
-    query = f"SELECT * FROM Transaction WHERE (from_account = '{accNo}' OR to_account = '{accNo}') AND (amount >= '{amount1}' AND amount <= '{amount2}') AND (date >= '{date1}' AND date <= '{date2}')"
-    mycursor.execute(query)
-    result = mycursor.fetchall()
-    #result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
-    mydb.commit()
-    print(result)
-    return result  
 
 def createStock(stock_name, live_price, percentage_change):
     query = f"INSERT INTO Stock VALUES('{stock_name}','{live_price}','{percentage_change}')"
