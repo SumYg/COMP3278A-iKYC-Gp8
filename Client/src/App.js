@@ -188,17 +188,20 @@ function BackToAccountButton(props) {
   return <button onClick={() => {props.setMainState('account')}}>Back To Account</button>
 }
 function TransactionPage(props){
-  let buttons, currentNo;
+  let buttons, currentNo, heading;
   console.log("[]]")
   console.log(props.currentAcc)
   switch(props.currentAcc) {
     case 'saving':
       currentNo = props.saving[0]
+      heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1)
       break
     case 'credit':
       currentNo = props.invest[0]
+      heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1)
       break
     default:
+      heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1) + 'ment'
       currentNo = props.credit[0]
   }
   console.log(currentNo)
@@ -210,17 +213,55 @@ function TransactionPage(props){
   } else {
     buttons = <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
   }
-  function search(e) {
+  return <div id="transaction-page">
+    <h1>{heading} Transaction Page</h1>
+    {buttons}
+    <TransactionHistoryTable accNo={currentNo}/>
+    <BackToAccountButton setMainState={props.setMainState}/>
+    <LogoutButton />
+  </div>
+}
+function TransactionHistoryTable(props) {
+  const [data, setData] = useState(undefined);
+  
+  if (data == undefined) {
+    setData([])
+    fetch(pyServerAddress + 'getTransHis', {
+      method: "POST",
+      body: JSON.stringify([props.accNo, '', '', '', '', '', '', '', '', ''])
+    }).then(response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          if (res.length === 0) {
+            setData([['None', 'None', 'None', 'None', 'None', 'None']])
+          } else {
+            setData(res)
+          }
+        })
+      } else {
+        alert("Server return status "+response.status)
+      }
+    })
+  }
+  function search() {
+    let accountno=props.accNo;
     let transactionid=document.getElementById("transactionid").value;
-    let amountfrom=parseFloat(document.getElementById("amountfrom").value);
-    let amountto=parseFloat(document.getElementById("amountto").value);
+    let amountfrom=(document.getElementById("amountfrom").value == '')? '': parseFloat(document.getElementById("amountfrom").value);
+    let amountto=(document.getElementById("amountto").value == '')? '': parseFloat(document.getElementById("amountto").value);
     let datefrom=document.getElementById("datefrom").value;
     let dateto=document.getElementById("dateto").value;
     let hourfrom=document.getElementById("hourfrom").value;
     let hourto=document.getElementById("hourto").value;
     let fromAccount=document.getElementById("fromAccount").value;
     let toAccount=document.getElementById("toAccount").value;
-    let accountno=currentNo;
+
+    if (fromAccount !== accountno && toAccount === '') {
+      toAccount = accountno
+    } 
+    if (toAccount !== accountno && fromAccount === '') {
+      fromAccount = accountno
+    } 
     if(amountfrom>amountto){
       [amountfrom,amountto]=[amountto,amountfrom];
       console.log("amount bigger");
@@ -229,19 +270,18 @@ function TransactionPage(props){
       [datefrom,dateto]=[dateto,datefrom];
       console.log("date bigger");
     }
-    fetch(pyServerAddress + 'transactionsearch', {
+    fetch(pyServerAddress + 'getTransHis', {
       method: "POST",
-      body: JSON.stringify([transactionid,amountfrom,amountto,datefrom,dateto,hourfrom,hourto,
-        fromAccount,toAccount,accountno])
+      body: JSON.stringify([accountno, transactionid,amountfrom,amountto,datefrom,dateto,hourfrom,hourto,
+        fromAccount,toAccount])
     }).then( response => {
       if (response.status === 200) {
         response.json().then( res => {
           console.log(res)
-          if (res) {
-            
-            // props.change2Home()
+          if (res.length === 0) {
+            setData([['None', 'None', 'None', 'None', 'None', 'None']])
           } else {
-            
+            setData(res)
           }
         })
       } else {
@@ -250,11 +290,8 @@ function TransactionPage(props){
     })
     
   }
-  return <div id="transaction-page">
-    <h1>TransactionPage</h1>
-    {props.currentAcc}
-    {buttons}
-    <span id="transearch">
+  return <React.Fragment>
+  <span id="transearch">
     <table>
       <tr>
         <th>Transaction ID</th>
@@ -290,35 +327,7 @@ function TransactionPage(props){
     </span>
     <br />
     <button onClick={search}>Search</button>
-    <TransactionHistoryTable accNo={currentNo}/>
-    <BackToAccountButton setMainState={props.setMainState}/>
-    <LogoutButton />
-  </div>
-}
-function TransactionHistoryTable(props) {
-  const [data, setData] = useState(undefined);
-  
-  if (data == undefined) {
-    setData([])
-    fetch(pyServerAddress + 'getTransHis', {
-      method: "POST",
-      body: JSON.stringify([props.accNo])
-    }).then(response => {
-      if (response.status === 200) {
-        response.json().then( res => {
-          console.log(res)
-          if (res.length === 0) {
-            setData([['None', 'None', 'None', 'None', 'None', 'None']])
-          } else {
-            setData(res)
-          }
-        })
-      } else {
-        alert("Server return status "+response.status)
-      }
-    })
-  }
-  return <div id='history-div' style={{overflow: 'auto', height: '80%'}}>
+  <div id='history-div' style={{overflow: 'auto', height: '80%'}}>
   <table id='history-table' >
     <tbody>
       <tr>
@@ -333,6 +342,7 @@ function TransactionHistoryTable(props) {
     </tbody>
   </table>
   </div>
+  </React.Fragment>
   
 }
 function TransButton(props) {
@@ -607,6 +617,9 @@ function LoginPage(props) {
   }
   function login() {
     // alert("loging")
+    document.getElementById('loginForm').outerHTML = '<div id="loading-circle"></div>'
+    document.getElementById('face_login').style.display="none"
+    document.getElementById('register-button').style.display="none"
     RTC2server(null, false, props.change2Home)
   }
   function passwordlogin(e) {
