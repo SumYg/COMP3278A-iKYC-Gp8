@@ -13,7 +13,7 @@ python server.py
 ```
 Then open http://localhost:8080 in browser
 
-## TO-DO List
+## Features
 - [x] Login Page
 <!-- - [ ] Show camera video when using face id to login -->
 - [x] Redirect/Change to Home Page after the face of the user is recorgnised
