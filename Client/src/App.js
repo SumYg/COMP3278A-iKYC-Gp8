@@ -3,7 +3,7 @@ import './App.css';
 import React, {useState, useEffect} from 'react';
 import {RTC2server} from "./RTCserver_connection.js"
 import profilepic from './profilepic.png';
-import creditcard from './creditcard.png';
+// import creditcard from './creditcard.png';
 import ArrayRecords from './Tables.js'
 import RealTimeStockTable from './stock.js'
 
@@ -224,7 +224,7 @@ function TransactionPage(props){
 function TransactionHistoryTable(props) {
   const [data, setData] = useState(undefined);
   
-  if (data == undefined) {
+  if (data === undefined) {
     setData([])
     fetch(pyServerAddress + 'getTransHis', {
       method: "POST",
@@ -247,8 +247,8 @@ function TransactionHistoryTable(props) {
   function search() {
     let accountno=props.accNo;
     let transactionid=document.getElementById("transactionid").value;
-    let amountfrom=(document.getElementById("amountfrom").value == '')? '': parseFloat(document.getElementById("amountfrom").value);
-    let amountto=(document.getElementById("amountto").value == '')? '': parseFloat(document.getElementById("amountto").value);
+    let amountfrom=(document.getElementById("amountfrom").value === '')? '': parseFloat(document.getElementById("amountfrom").value);
+    let amountto=(document.getElementById("amountto").value === '')? '': parseFloat(document.getElementById("amountto").value);
     let datefrom=document.getElementById("datefrom").value;
     let dateto=document.getElementById("dateto").value;
     let hourfrom=document.getElementById("hourfrom").value;
@@ -388,7 +388,7 @@ function InternalTransactionPage(props) {
       if (response.status === 200) {
         response.json().then( res => {
           console.log(res)
-          if (res!=-1) {
+          if (res!==-1) {
             alert("Transaction Succeed")
             props.setMainState('account')
             // props.change2Home()
