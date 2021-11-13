@@ -590,6 +590,4 @@ USER_NAME = "edmund"
 #internalTransFromCreditToSaving(10000)
 #internalTransFromSavingToInvest(5000)
 # internalTransFromInvestToSaving(5000)
-#getTransactionHistoryDate(getInvestAccount()[0], "20211101", "20211131")
-#getTransactionHistoryDateTime(getSavingAccount()[0], "20211112", "20211113", "1900", "2000")
-#getTransactionHistoryAmountDate(getSavingAccount()[0], "11", "100", "20211112", "20211113")
+#getTransactionHistory("00000001", "", "", "", "", 1, 10, "00000004", "00000005")
