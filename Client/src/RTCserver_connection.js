@@ -172,7 +172,6 @@ export function RTC2server(userName, isRegister, afterTrain) {
 
     function stop() {
         // document.getElementById('stop').style.display = 'none';
-
         // close transceivers
         if (pc.getTransceivers) {
             pc.getTransceivers().forEach(function(transceiver) {
@@ -181,7 +180,6 @@ export function RTC2server(userName, isRegister, afterTrain) {
                 }
             });
         }
-
         
 
         // close peer connection
@@ -192,6 +190,8 @@ export function RTC2server(userName, isRegister, afterTrain) {
 
     function stopCamera() {
         // close local audio / video
+        document.getElementById('video').outerHTML = '<div id="loading-circle"></div>'
+        console.log('video')
         pc.getSenders().forEach(function(sender) {
             console.log(sender)
             sender.track.stop();
