@@ -431,11 +431,15 @@ def internalTransFromCToI(amount):
 
 @getPostList
 @sendDictAsJSON
-def getTransactionHistory(accNo, date1, date2, time1, time2, amount1, amount2, fromA, toA):
+def getTransactionHistory(accNo, id, amount1, amount2, date1, date2, time1, time2, fromA, toA):
     """
     get transaction history related to the given account
     return 2d list
     """
+    if (id == ''):
+        idQ = ''
+    else:
+        idQ = f" AND transaction_id = '{id}'"
     if (date1 == ''):
         dateQ = ''
     else:
@@ -452,7 +456,7 @@ def getTransactionHistory(accNo, date1, date2, time1, time2, amount1, amount2, f
         fromToQ = f"(from_account = '{accNo}' OR to_account = '{accNo}')"
     else:
         fromToQ = f"(from_account = '{accNo}' AND to_account = '{toA}') OR (from_account = '{fromA}' AND to_account = '{accNo}')"
-    query = f"SELECT * FROM Transaction WHERE {fromToQ}{dateQ}{timeQ}{amountQ} ORDER BY date DESC, time DESC, amount DESC"
+    query = f"SELECT * FROM Transaction WHERE {fromToQ}{dateQ}{timeQ}{amountQ}{idQ} ORDER BY date DESC, time DESC, amount DESC"
     mycursor.execute(query)
     result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
     mydb.commit()
