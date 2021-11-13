@@ -44,6 +44,9 @@ function StocKTable(props) {
                     <td><div >{element[1]}</div></td>
                     <td><div >{element[2]}</div></td>
                     <td><div >{element[3]}</div></td>
+                    <td><div >{element[4]}</div></td>
+                    <td><div >{element[5]}</div></td>
+                    <td><div >{element[6]}</div></td>
                     <td> <Action stockName={element[0]}/></td>
                 </tr>
             )
