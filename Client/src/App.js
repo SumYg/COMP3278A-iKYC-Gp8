@@ -211,7 +211,43 @@ function TransactionPage(props){
     buttons = <TransButton setMainState={props.setMainState} text='Internal' state='internal'/>
   }
   function search(e) {
-    
+    let transactionid=document.getElementById("transactionid").value;
+    let amountfrom=parseFloat(document.getElementById("amountfrom").value);
+    let amountto=parseFloat(document.getElementById("amountto").value);
+    let datefrom=document.getElementById("datefrom").value;
+    let dateto=document.getElementById("dateto").value;
+    let hourfrom=document.getElementById("hourfrom").value;
+    let hourto=document.getElementById("hourto").value;
+    let fromAccount=document.getElementById("fromAccount").value;
+    let toAccount=document.getElementById("toAccount").value;
+    let accountno=currentNo;
+    if(amountfrom>amountto){
+      [amountfrom,amountto]=[amountto,amountfrom];
+      console.log("amount bigger");
+    }
+    if(new Date(datefrom).getTime()>new Date(dateto).getTime()){
+      [datefrom,dateto]=[dateto,datefrom];
+      console.log("date bigger");
+    }
+    fetch(pyServerAddress + 'transactionsearch', {
+      method: "POST",
+      body: JSON.stringify([transactionid,amountfrom,amountto,datefrom,dateto,hourfrom,hourto,
+        fromAccount,toAccount,accountno])
+    }).then( response => {
+      if (response.status === 200) {
+        response.json().then( res => {
+          console.log(res)
+          if (res) {
+            
+            // props.change2Home()
+          } else {
+            
+          }
+        })
+      } else {
+        alert("Server return status "+response.status)
+      }
+    })
     
   }
   return <div id="transaction-page">
@@ -224,7 +260,7 @@ function TransactionPage(props){
         <th>Transaction ID</th>
         <th>Amount</th>
         <th>Date:</th>
-        <th>Time(h)</th>
+        <th>Time(h)(00-23)</th>
         <th>From Account</th>
         <th>To Account</th>
       </tr>
@@ -470,10 +506,7 @@ function StockPage(props) {
           <th>Stock</th>
           <th>Price</th>
           <th>% Change</th>
-          <th>Owned</th>
-          <th>History Profit</th>
-          <th>Current Value</th>
-          <th>Total Spend</th>
+          <th>Owned share</th>
           <th>Action</th>
         </tr>
       <RealTimeStockTable records={props.stock} />
