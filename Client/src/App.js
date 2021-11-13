@@ -470,7 +470,10 @@ function StockPage(props) {
           <th>Stock</th>
           <th>Price</th>
           <th>% Change</th>
-          <th>Owned share</th>
+          <th>Owned</th>
+          <th>History Profit</th>
+          <th>Current Value</th>
+          <th>Total Spend</th>
           <th>Action</th>
         </tr>
       <RealTimeStockTable records={props.stock} />
