@@ -193,3 +193,21 @@ table tr:nth-child(2n){
   overflow: auto;
   /* max-height: 40%; */
 }
+
+#loading-circle {
+  margin: auto;
+  border: 20px solid #EAF0F6;
+  border-radius: 50%;
+  border-top: 20px solid #FF7A59;
+  width: 240px;
+  height: 240px;
+  margin: 1em;
+  animation: spinner 3s ease-out infinite;
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  33.3% { transform: rotate(120deg); }
+  66.6% { transform: rotate(240deg); }
+  100% { transform: rotate(360deg); }
+}
