@@ -447,15 +447,38 @@ def getTransactionHistory(accNo, id, amount1, amount2, date1, date2, time1, time
     if (time1 == ''):
         timeQ = ''
     else:
-        timeQ = f" AND (time >= '{time1}00' AND time <= '{time2}59')"
+        timeQ = f" AND (time >= '{time1}:00' AND time <= '{time2}:59')"
     if (amount1 == ''):
         amountQ = ''
     else:
         amountQ = f" AND (amount >= '{amount1}' AND amount <= '{amount2}')"
-    if (fromA == '' and toA == ''):
-        fromToQ = f"(from_account = '{accNo}' OR to_account = '{accNo}')"
-    else:
-        fromToQ = f"(from_account = '{accNo}' AND to_account = '{toA}') OR (from_account = '{fromA}' AND to_account = '{accNo}')"
+
+    # if (fromA == ''):
+    #     fromToQ = f"(to_account = '{toA}') AND (from_account = '{accNo}' OR to_account = '{accNo}') "
+    # if (toA == ''):
+    #     fromToQ = f"(from_account = '{fromA}') AND (from_account = '{accNo}' OR to_account = '{accNo}')"
+        
+    # if (fromA == '' and toA == ''):
+    #     fromToQ = f"(from_account = '{accNo}' OR to_account = '{accNo}')"
+    # else:
+    #     fromToQ = f"(from_account = '{accNo}' AND to_account = '{toA}') OR (from_account = '{fromA}' AND to_account = '{accNo}')"
+
+    sqlfrom = fromA
+    sqlto = toA
+    logic = 'OR'
+    if fromA != '' and toA != '':
+            logic = 'AND'
+    if fromA == '':
+        sqlto = accNo
+    
+    if toA == '':
+        sqlfrom = accNo
+    
+    
+
+    fromToQ = f"(from_account = '{sqlfrom}' {logic} to_account = '{sqlto}')"
+    print(fromToQ)
+
     query = f"SELECT * FROM Transaction WHERE {fromToQ}{dateQ}{timeQ}{amountQ}{idQ} ORDER BY date DESC, time DESC, amount DESC"
     mycursor.execute(query)
     result = [[i[0], i[1], str(i[2]), str(i[3]), i[4], i[5]] for i in mycursor.fetchall()]
