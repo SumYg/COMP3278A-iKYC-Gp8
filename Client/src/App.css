@@ -1,8 +1,8 @@
 body {
   /* background-image: linear-gradient(to bottom right, #F97794, #623AA2); */
   /* background-color: #f97793bd; */
-  background-image: linear-gradient(to bottom, #6991dd60 50%, #3045bb9f 50%),
-                    linear-gradient(to right, #9a67ece5 50%, #61b6ee 50%);
+  background-image: 
+                    linear-gradient(to right, rgba(146, 90, 236, 0.898), #61b6ee);
   /* background-size: 5px 10px, 10px 5px; */
   height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -20,7 +20,6 @@ button {
   /* box-shadow: ; */
   margin-bottom: 1em;
   font-weight: bold;
-  /* box-shadow: 20px; */
 }
 #logout-but{
   position: absolute;
