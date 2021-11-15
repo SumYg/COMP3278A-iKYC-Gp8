@@ -15,7 +15,7 @@ from av import VideoFrame
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 import aiohttp_cors
-import sqlconnector, sqls
+import sqls
 
 from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
 
@@ -83,16 +83,9 @@ class VideoTransformTrack(MediaStreamTrack):
             frame = new_frame
         return frame
 
-async def index(request):
-    content = open(os.path.join(ROOT, "index.html"), "r").read()
-    return web.Response(content_type="text/html", text=content)
-
 async def logo(request):
     # content = open(os.path.join(ROOT, "logo.png"), "r").read()
     return web.FileResponse('./logo.png')
-
-async def indexjs(request):
-    return await javascript(request, 'index.js')
 
 async def rtcjs(request):
     return await javascript(request, 'RTCserver_connection.js')
@@ -153,11 +146,6 @@ def show_all_info(request):
 @sendDictAsJSON
 def check(post_data):
     return {'exist': sqls.checkDuplicateUser(post_data['username'])}
-
-@getPostData
-@sendDictAsJSON
-def test2(post_data):
-    return post_data
 
 @getPostData
 @sendDictAsJSON
@@ -286,15 +274,9 @@ async def on_shutdown(app):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="WebRTC audio / video / data-channels demo"
-    )
-    parser.add_argument("--cert-file", help="SSL certificate file (for HTTPS)")
-    parser.add_argument("--key-file", help="SSL key file (for HTTPS)")
-    parser.add_argument(
-        "--port", type=int, default=8080, help="Port for HTTP server (default: 8080)"
+        description="COMP3278A Group 8"
     )
     parser.add_argument("--verbose", "-v", action="count")
-    parser.add_argument("--write-audio", help="Write received audio to a file")
     args = parser.parse_args()
 
     if args.verbose:
@@ -302,20 +284,11 @@ if __name__ == "__main__":
     else:
         logging.basicConfig(level=logging.INFO)
 
-    if args.cert_file:
-        ssl_context = ssl.SSLContext()
-        ssl_context.load_cert_chain(args.cert_file, args.key_file)
-    else:
-        ssl_context = None
-
     app = web.Application()
     app.on_shutdown.append(on_shutdown)
     # ws_serve()
-    app.router.add_get("/", index)
     app.router.add_get("/logo.png", logo)
-    app.router.add_get("/index.js", indexjs)
     app.router.add_get("/RTCserver_connection.js", rtcjs)
-    app.router.add_get("/test", sqlconnector.selection)
     app.router.add_get("/myInfo", show_info)
     app.router.add_get("/allInfo", show_all_info)
     app.router.add_get("/getSaving", sqls.getSavingAccount)
@@ -329,7 +302,6 @@ if __name__ == "__main__":
     app.router.add_post("/insert", insertUser)
     app.router.add_post("/password_login", password_login)
     app.router.add_post("/login", login)
-    app.router.add_post("/test2", test2)
     app.router.add_post('/list', listTest)
     app.router.add_post('/external', sqls.makeTransFromSaving)
     app.router.add_post("/getTransHis", sqls.getTransactionHistory)
@@ -355,4 +327,4 @@ if __name__ == "__main__":
     for route in list(app.router.routes()):
         cors.add(route)
 
-    web.run_app(app, access_log=None, port=args.port, ssl_context=ssl_context)
+    web.run_app(app, access_log=None, port=8080)
