@@ -1,4 +1,4 @@
-# WebGUI
+# COMP3278A Group 8
 
 ## Build
 ### Windows
@@ -11,7 +11,6 @@ python -m pip install -r requirements.txt
 ``` 
 python server.py
 ```
-Then open http://localhost:8080 in browser
 
 ## Features
 - [x] Login Page
