@@ -86,10 +86,10 @@ function Action(props) {
             body = <div ><BuyButton setActionState={setState}/> / <SellButton setActionState={setState}/></div>
             break
         case 'buy':
-            body = <div><p><input onBlur={e => setInputValue(e.target.value)}></input></p><button onClick={()=>{updatePosition('Buy')}}>Submit</button><button onClick={()=>{setState('show')}}>Cancel</button></div>
+            body = <div><p><input onBlur={e => setInputValue(e.target.value)}></input></p><button onClick={()=>{updatePosition('Buy')}}>Submit</button> / <button onClick={()=>{setState('show')}}>Cancel</button></div>
             break
         default:
-            body = <div><p><input onBlur={e => setInputValue(e.target.value)}></input></p><button onClick={()=>{updatePosition('Sell')}}>Submit</button><button onClick={()=>{setState('show')}}>Cancel</button></div>
+            body = <div><p><input onBlur={e => setInputValue(e.target.value)}></input></p><button onClick={()=>{updatePosition('Sell')}}>Submit</button> / <button onClick={()=>{setState('show')}}>Cancel</button></div>
 
     }
     return body
