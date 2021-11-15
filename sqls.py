@@ -119,7 +119,9 @@ def getSavingAccount():
     """
     query = f"SELECT S.account_number, S.currency, S.amount FROM Account A, Saving S WHERE A.account_number = S.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
-    result = mycursor.fetchone()
+    result = list(mycursor.fetchone())
+    result[2] = round(result[2], 2)
+    result = tuple(result)
     mydb.commit()
     print(result)
     return result
@@ -133,7 +135,9 @@ def getCreditAccount():
     """
     query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.available_credit - C.remaining_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
-    result = mycursor.fetchone()
+    result = list(mycursor.fetchone())
+    result[2] = round(result[3], 2)
+    result = tuple(result)
     mydb.commit()
     print(result)
     return result
@@ -145,7 +149,9 @@ def getInvestAccount():
     """
     query = f"SELECT I.account_number, I.amount FROM Account A, Investment I WHERE A.account_number = I.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
-    result = mycursor.fetchone()
+    result = list(mycursor.fetchone())
+    result[2] = round(result[1], 2)
+    result = tuple(result)
     mydb.commit()
     print(result)
     return result
