@@ -1,13 +1,13 @@
 export default function ArrayRecords(props) {
     var list = [];
     let i =0;
-    console.log("=====",props.records)
+    // console.log("=====",props.records)
     let data = props.records
     if (data !== undefined) {
         data.forEach(element => {
             // let id = element[0]
             // element = element[1]
-            console.log(i)
+            // console.log(i)
             list.push(
                 <tr id={i} key={i} className="record_row">
                     <Array2Td records={element} rowNo={i}/>
