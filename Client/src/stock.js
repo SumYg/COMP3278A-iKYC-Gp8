@@ -6,7 +6,7 @@ export default function RealTimeStockTable(props) {
             if (response.status === 200) {
               response.json().then( res => {
                 console.log("Get")
-                console.log(res)
+                // console.log(res)
                 setData(res['data'])
             })
             } else {
@@ -30,7 +30,7 @@ export default function RealTimeStockTable(props) {
 function StocKTable(props) {
     var list = [];
     let i =0;
-    console.log("=====",props.records)
+    // console.log("=====",props.records)
     let data = props.records
     if (data !== undefined) {
         data.forEach(element => {
