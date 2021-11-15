@@ -465,7 +465,7 @@ function ExternalTransactionPage(props) {
     <form>
       
       <p><label htmlFor="exttoAccount">Account Number:</label>
-      <input name='exttoAccount' id='exttoAccount' required></input>
+      <input name='exttoAccount' id='exttoAccount' autoFocus></input>
      
       </p>
       <p>
@@ -486,8 +486,8 @@ function AccountPage(props) {
     <BackToHomeButton setMainState={props.setMainState}/>
     <LogoutButton />
     <div>
-      <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount:{props.saving[1]}{props.saving[2]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit <span >Balance:{props.credit[2]-props.credit[1]}</span></div></button>
+      <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount: {props.saving[1]} {props.saving[2]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit <span >Balance: {props.credit[2]-props.credit[1]}</span></div></button>
       <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: {props.invest[1]}</span></div></button>
     </div>
   </div>
@@ -566,6 +566,7 @@ function LoginPage(props) {
     document.getElementById("register-button").style.display="none";
     document.getElementById("welcome").innerText="Please register";
     document.getElementById("record_face").style.display="block";
+    document.getElementById("account").focus();
   }
 
   function record() {
@@ -653,7 +654,7 @@ function LoginPage(props) {
   return <div id="login-page">
   <img style={{width:'300px', maxHeight:"50%"}} src={logo} id="logo" alt='logo'/>
   <h1 id="welcome">Welcome, Please Login</h1><div id="LoginANDRegister">
-  <form id="loginForm"><p><label htmlFor="account">Account:</label><input type="text" id="account"></input></p><p><label htmlFor="password">Password:</label> <input type="password" id="password"></input></p>
+  <form id="loginForm"><p><label htmlFor="account">Account:</label><input type="text" id="account" autoFocus></input></p><p><label htmlFor="password">Password:</label> <input type="password" id="password"></input></p>
       <button id="pw_login" onClick={passwordlogin}>Login with password</button></form>
       <button id="face_login" onClick={login}>Login with FaceID</button>
       <button id="register-button" onClick={register}>Register</button>
