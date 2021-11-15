@@ -7,7 +7,7 @@ Inside Anaconda or just the system environment with Visual Studio. It should be 
 ```
 python -m pip install -r requirements.txt
 ```
-## Run
+## Running Backend Server
 ``` 
 python server.py
 ```
