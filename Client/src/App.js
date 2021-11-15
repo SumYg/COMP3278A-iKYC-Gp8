@@ -12,7 +12,6 @@ const pyServerAddress = 'http://localhost:8080/'
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.test = this.test.bind(this)
     this.change2Home = this.change2Home.bind(this)
     this.setMainState = this.setMainState.bind(this)
     this.setCurrentAccount = this.setCurrentAccount.bind(this)
@@ -21,13 +20,10 @@ class App extends React.Component {
       saving: ["HKD",123],
       invest: ["12312",123,"",""],
       credit: ["123123",123],
-      stock:[[]]
+      // stock:[[]]
       // username: 'A',
       // current: 'BC',
     }
-  }
-  test() {
-    console.log("Moved ")
   }
   setCurrentAccount(state) {
     this.setState({'currentAcc': state})
@@ -38,7 +34,7 @@ class App extends React.Component {
         fetch(pyServerAddress + 'allInfo').then(response => {
           if (response.status === 200) {
             response.json().then( res => {
-              console.log(res)
+              // console.log(res)
               this.setState({'historyData': res['data'], pageState: state})
             })
           } else {
@@ -50,7 +46,7 @@ class App extends React.Component {
         fetch(pyServerAddress + 'getSaving').then(response => {
           if (response.status === 200) {
             response.json().then( res => {
-              console.log(res)
+              // console.log(res)
               this.setState({'saving': res['data'], pageState: state})
             })
           } else {
@@ -60,7 +56,7 @@ class App extends React.Component {
         fetch(pyServerAddress + 'getCredit').then(response => {
           if (response.status === 200) {
             response.json().then( res => {
-              console.log(res)
+              // console.log(res)
               this.setState({'credit': res['data'], pageState: state})
             })
           } else {
@@ -70,7 +66,7 @@ class App extends React.Component {
         fetch(pyServerAddress + 'getInvest').then(response => {
           if (response.status === 200) {
             response.json().then( res => {
-              console.log(res)
+              // console.log(res)
               this.setState({'invest': res['data'], pageState: state})
             })
           } else {
@@ -82,7 +78,7 @@ class App extends React.Component {
         fetch(pyServerAddress + 'getStock').then(response => {
           if (response.status === 200) {
             response.json().then( res => {
-              console.log(res)
+              // console.log(res)
               this.setState({'stock': res['data'], pageState: state})
             })
           } else {
@@ -114,7 +110,7 @@ class App extends React.Component {
     fetch(pyServerAddress + 'myInfo').then(response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           this.setState(res)
           this.setMainState('home')
         })
@@ -130,7 +126,7 @@ class App extends React.Component {
     let body
     switch(pageState) {
       case 'login':
-        body = <LoginPage onClick={this.test} change2Home={this.change2Home}/>
+        body = <LoginPage change2Home={this.change2Home}/>
         break
       case 'home':
         body = <HomePage username={this.state.username} current={this.state.current} setMainState={this.setMainState}/>
@@ -189,8 +185,8 @@ function BackToAccountButton(props) {
 }
 function TransactionPage(props){
   let buttons, currentNo, heading;
-  console.log("[]]")
-  console.log(props.currentAcc)
+  // console.log("[]]")
+  // console.log(props.currentAcc)
   switch(props.currentAcc) {
     case 'saving':
       currentNo = props.saving[0]
@@ -204,7 +200,7 @@ function TransactionPage(props){
       heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1) + 'ment'
       currentNo = props.invest[0]
   }
-  console.log(currentNo)
+  // console.log(currentNo)
   if (props.currentAcc === 'saving') {
     buttons = <React.Fragment>
     <TransButton setMainState={props.setMainState} text='External' state='external'/>
@@ -232,7 +228,7 @@ function TransactionHistoryTable(props) {
     }).then(response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           if (res.length === 0) {
             setData([['None', 'None', 'None', 'None', 'None', 'None']])
           } else {
@@ -283,7 +279,7 @@ function TransactionHistoryTable(props) {
     }).then( response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           if (res.length === 0) {
             setData([['None', 'None', 'None', 'None', 'None', 'None']])
           } else {
@@ -355,8 +351,8 @@ function TransButton(props) {
   return <button onClick={() => {props.setMainState(props.state)}} id={props.state}>{props.text}</button>
 }
 function InternalTransactionPage(props) {
-  console.log(props.currentAcc)
-  console.log(props.currentData)
+  // console.log(props.currentAcc)
+  // console.log(props.currentData)
   let selectOptions;
   switch (props.currentAcc) {
     case 'invest':
@@ -382,18 +378,18 @@ function InternalTransactionPage(props) {
   function internaltrans(e){
     e.preventDefault();
     let amount = parseFloat(document.getElementById("amount").value);
-    console.log(amount)
+    // console.log(amount)
     let inttoAccount=document.getElementById("inttoAccount").value;
     let intfromAccount=props.currentAcc;
     let serverfunction="int"+intfromAccount+"to"+inttoAccount;
-    console.log(serverfunction)
+    // console.log(serverfunction)
     fetch(pyServerAddress + serverfunction, {
       method: "POST",
       body: JSON.stringify([amount])
     }).then( response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           if (res!==-1) {
             alert("Transaction Succeed")
             props.setMainState('account')
@@ -432,8 +428,8 @@ function InternalTransactionPage(props) {
   </div>
 }
 function ExternalTransactionPage(props) {
-  console.log(props.currentAcc)
-  console.log(props.currentData)
+  // console.log(props.currentAcc)
+  // console.log(props.currentData)
   function sendForm(e) {
     e.preventDefault()
     let amount = parseFloat(document.getElementById("amount").value)
@@ -444,7 +440,7 @@ function ExternalTransactionPage(props) {
     }).then( response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           if (res) {
             alert("Transaction Succeed")
             props.setMainState('account')
@@ -578,7 +574,7 @@ function LoginPage(props) {
       }).then( response => {
         if (response.status === 200) {
           response.json().then( res => {
-            console.log(res)
+            // console.log(res)
             if (res.registered) {
               props.change2Home()
             } else {
@@ -602,7 +598,7 @@ function LoginPage(props) {
       }).then( response => {
         if (response.status === 200) {
           response.json().then( res => {
-            console.log(res)
+            // console.log(res)
             if (res.exist) {
               console.log('Duplicate Username')
               alert('Duplicate Username')
@@ -639,7 +635,7 @@ function LoginPage(props) {
     }).then( response => {
       if (response.status === 200) {
         response.json().then( res => {
-          console.log(res)
+          // console.log(res)
           if (res.loginSucceed) {
             props.change2Home()
           } else {
