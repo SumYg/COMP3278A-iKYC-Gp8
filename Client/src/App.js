@@ -197,12 +197,12 @@ function TransactionPage(props){
       heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1)
       break
     case 'credit':
-      currentNo = props.invest[0]
+      currentNo = props.credit[0]
       heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1)
       break
     default:
       heading = props.currentAcc.charAt(0).toUpperCase() + props.currentAcc.slice(1) + 'ment'
-      currentNo = props.credit[0]
+      currentNo = props.invest[0]
   }
   console.log(currentNo)
   if (props.currentAcc === 'saving') {
