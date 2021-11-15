@@ -256,6 +256,12 @@ function TransactionHistoryTable(props) {
     let fromAccount=document.getElementById("fromAccount").value;
     let toAccount=document.getElementById("toAccount").value;
 
+    if (fromAccount !== '' && toAccount !== '') {
+      if (toAccount !== accountno && fromAccount !== accountno) {
+        alert("Please check your input!")
+        return
+      }
+    }
     if (fromAccount !== accountno && toAccount === '') {
       toAccount = accountno
     } 
