@@ -1,6 +1,6 @@
 import argparse
 import asyncio
-import json
+import simplejson as json
 import logging
 import os
 import ssl
@@ -103,14 +103,16 @@ async def javascript(request, file):
 
 def sendDictAsJSON(func):
     def inner(*request):
-        return web.json_response(func(*request))
+        return web.Response(content_type="application/json", text=json.dumps(func(*request)))
+        # return web.json_response(json.dumps(func(*request)))
     return inner
 
 def sendTupleAsJSON(func):
     def inner(request=""):
         if(request==""):	
             return func()
-        return web.json_response({"data": func()})
+        return web.Response(content_type="application/json", text=json.dumps({"data": func()}))
+        # return web.json_response(json.dumps({"data": func()}))
     return inner
 
 def getPostList(func):
