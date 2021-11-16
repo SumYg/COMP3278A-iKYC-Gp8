@@ -32,13 +32,13 @@ const Array2Td = (props) => {
                 // element = element[1]
                 // console.log(props.rowNo+'a'+i)
                 list.push(
-                    <td key={props.rowNo+'td'+i}><div key={props.rowNo+'div'+i}>{element}</div></td>
+                    <td key={props.rowNo+'td'+i}>{element}</td>
                 )
                 i += 1
             });
             return list;
         } else {
-            return <td><div >{data}</div></td>
+            return <td>{data}</td>
         }
     }
     
