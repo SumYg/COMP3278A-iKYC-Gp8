@@ -20,9 +20,10 @@ def stock(symbol):
 symbol_list = ["0005.HK","0388.HK","0700.HK","AAPL","BTC-USD","ETH-USD","FB","TSLA"]
 
 
-while (True):
-    for i in symbol_list:
-        json_data = json.loads(stock(i))
-        print(json_data["stock_name"])
-        sqls.updateStock(json_data["stock_name"],json_data["live_price"],json_data["percentage_change"])
-    time.sleep(6)
+def stock_update():
+    while (True):
+        for i in symbol_list:
+            json_data = json.loads(stock(i))
+            print(json_data["stock_name"])
+            sqls.updateStock(json_data["stock_name"],json_data["live_price"],json_data["percentage_change"])
+        time.sleep(6)
