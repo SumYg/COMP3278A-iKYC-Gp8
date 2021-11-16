@@ -20,7 +20,6 @@ mysql> source h3566726.sql
 4. start the backend server
 ``` 
 python server.py
-python stock.py
 ```
 after starting the server suvessfully, you will see the following output
 ![image](https://user-images.githubusercontent.com/62173795/142026369-90dc7f6c-53cc-4103-96b0-8cb55fc2191f.png)
