@@ -27,3 +27,4 @@ Pillow
 aiohttp_cors
 simplejson
 mysql
+mysql.connector
