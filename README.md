@@ -38,11 +38,25 @@ after starting the backend server and React App, you can goto localhost:3000 sta
 ![image](https://user-images.githubusercontent.com/62173795/142028359-28befa67-499f-4b4f-99b3-e07c229bfb5b.png)
 ### Register an account
 click the register button, input your unique username and your password, then click the button "Register your face" for registering your faceID. After clicked the button "Register your face", your device will try to open your camera and capture your face for training. Aftering training your face, you will automatically login the system<br>
-![image](https://user-images.githubusercontent.com/62173795/142029999-c8ad6156-15e4-4759-9fa0-a0aeb0ebf706.png) ![image](https://user-images.githubusercontent.com/61381909/142048623-d58dbe53-1284-4254-9167-a37f2d76dc4f.png)
+![image](https://user-images.githubusercontent.com/62173795/142029999-c8ad6156-15e4-4759-9fa0-a0aeb0ebf706.png) ![image](https://user-images.githubusercontent.com/62173795/142030205-4842a44e-1d4a-47a3-b832-516a994a9e13.png)
+### Do transaction
+after clicking the account button, you can see your saving, credit and investment account. Click any one of the account, you can see the transaction page. By clicking external in Saving account, you can transfer money to the saving accounts of other people. You can transfer money within your Saving/Investmnet/Credit account by internal transaction
+<br>![image](https://user-images.githubusercontent.com/62173795/142050098-d70f37d2-9e8b-444c-aa14-a62cb4198cbe.png) ![image](https://user-images.githubusercontent.com/62173795/142050339-5121e98c-6412-4a3f-b627-148a81e7e6f4.png) ![image](https://user-images.githubusercontent.com/62173795/142046734-469eeab5-ce6a-44a9-94bc-5149e4f03604.png)
+### Buy/Sell stock
+in the stock page, you can view different stocks. And you can buy stock by using the money in your investment account, so please transfer money to your investment account from your saving/credit account by doing internal transaction first ;)
+![image](https://user-images.githubusercontent.com/62173795/142047289-d05eb548-f908-4c1a-986b-fabd518604c0.png)
+![image](https://user-images.githubusercontent.com/62173795/142047449-8ab170f6-8565-40cd-9f0a-01499041a74c.png)
+### Searching transaction history
+you can search the transaction history by different selection option 
+<br>(can leave some selection option to be empty e.g. transaction with amount <$1 in time period 12/11/2021-13/11/2021)
+<br>![image](https://user-images.githubusercontent.com/62173795/142049206-c6da3103-4248-4259-b0aa-dfe7d15017e4.png)
+
+
+
 
 ### Demo
-demo video:
-https://moodle.hku.hk/course/view.php?id=86240
+demo video: https://drive.google.com/drive/folders/1FV2h3xu1VhOoKSIShewkzHqVLPiPJEGF
+guideline for Building: https://connecthkuhk-my.sharepoint.com/personal/edmundcy_connect_hku_hk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fedmundcy%5Fconnect%5Fhku%5Fhk%2FDocuments%2FInstallation%20demo%2Emkv&parent=%2Fpersonal%2Fedmundcy%5Fconnect%5Fhku%5Fhk%2FDocuments
 
 ## Features
 - [x] Login Page
@@ -59,17 +73,17 @@ https://moodle.hku.hk/course/view.php?id=86240
 
 
 
-### Transaction Page Features
+## Transaction Page Features
 - [X] Can show the balance of different account
 - [X] Can do transaction to other users' saving account (External Transaction)
 - [X] Can do transaction to other users' saving account (External Transaction)
 - [X] Can do transaction to same user's other account (Internal Transaction)
 - [X] Can search the transaction history by different selection option (can leave some selection option to be empty, or even use all the selection option)
 
-### Stock Page Features
+## Stock Page Features
 - [x] Show details of all available stocks, such as stock code, current price
 - [x] Can buy or sell stocks using investment account
 - [x] % change: The percentage change between current price and closing price
 - [x] Total spend: Total money spent on that stock
 - [X] History Profit: Total amount that earned from that stock
-- [X] Current Value: Current value of all owned shares
+- [X] Current Value: Current value of all owned stock
