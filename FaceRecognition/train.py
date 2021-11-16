@@ -111,7 +111,7 @@ async def train_model():
             if file.endswith("png") or file.endswith("jpg"):
                 path = os.path.join(root, file)
                 label = os.path.basename(root).replace("", "").upper()  # name
-                print(label, path)
+                
 
                 if label in label_ids:
                     pass
@@ -119,11 +119,11 @@ async def train_model():
                     label_ids[label] = current_id
                     current_id += 1
                 id_ = label_ids[label]
-                print(label_ids)
+                
 
                 pil_image = Image.open(path).convert("L")
                 image_array = np.array(pil_image, "uint8")
-                print(image_array)
+                
                 # Using multiscle detection
                 faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=3)
 
