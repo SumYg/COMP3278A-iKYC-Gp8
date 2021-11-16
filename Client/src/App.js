@@ -103,8 +103,8 @@ class App extends React.Component {
       //   })
       //   break
       default:
-      this.setState({pageState: state})
-  }
+        this.setState({pageState: state})
+    }
   }
   change2Home() {
     fetch(pyServerAddress + 'myInfo').then(response => {
@@ -120,6 +120,9 @@ class App extends React.Component {
     })
   }
   
+  componentDidMount() {
+    document.title = "COMP3278A Group 8"
+  }
   
   render() {
     const pageState = this.state.pageState
@@ -211,6 +214,7 @@ function TransactionPage(props){
   }
   return <div id="transaction-page">
     <h1>{heading} Transaction Page</h1>
+    <h3>Your account number is {currentNo}</h3>
     {buttons}
     <TransactionHistoryTable accNo={currentNo}/>
     <BackToAccountButton setMainState={props.setMainState}/>
