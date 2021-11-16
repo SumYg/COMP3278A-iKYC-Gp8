@@ -67,3 +67,4 @@ https://moodle.hku.hk/course/view.php?id=86240
 
 ## Stock Page Features
 - [x] total_spend
+- [X] live stock price 
