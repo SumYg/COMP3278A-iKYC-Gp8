@@ -24,8 +24,9 @@ python server.py
 after starting the server suvessfully, you will see the following output
 ![image](https://user-images.githubusercontent.com/62173795/142026369-90dc7f6c-53cc-4103-96b0-8cb55fc2191f.png)
 ### Running React App
-5. open another terminal and go to the directory of the Client folder, and start the react app
+5. after starting the server, open another terminal and go to the directory of the Client folder, start the react app
 ```
+COMP3278A-iKYC-Gp8-main> cd Client
 Client> npm start
 ```
 after starting the React App sucessfully, you will see the following output and the browser will automatically goto http://localhost:3000 ![image](https://user-images.githubusercontent.com/62173795/142026839-01d50af4-8472-4df0-aa53-34b894bf583f.png)<br>
