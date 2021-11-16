@@ -129,7 +129,7 @@ def getCreditAccount():
     """
     Return info of user.credit account
     """
-    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.remaining_credit - C.available_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
+    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.available_credit - C.remaining_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
     result = mycursor.fetchone()
     mydb.commit()
