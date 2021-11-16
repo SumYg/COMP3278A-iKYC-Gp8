@@ -66,5 +66,9 @@ https://moodle.hku.hk/course/view.php?id=86240
 - [X] Can search the transaction history by different selection option (can leave some selection option to be empty, or even use all the selection option)
 
 ## Stock Page Features
-- [x] total_spend
-- [X] live stock price 
+- [x] Show details of all available stocks, such as stock code, current price
+- [x] Can buy or sell stocks
+- [x] % change:
+- [x] Total spend: Total money spent on that stock
+- [X] History Profit: Total amount that earned from that stock
+- [X] Current Value: Current value of all owned stock
