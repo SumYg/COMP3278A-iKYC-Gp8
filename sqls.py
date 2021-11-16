@@ -124,18 +124,19 @@ def getSavingAccount():
     print(result)
     return result
 
-
-
 @sendTupleAsJSON
 def getCreditAccount():
     """
     Return info of user.credit account
     """
-    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.available_credit - C.remaining_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
+    query = f"SELECT C.account_number, C.available_credit, C.remaining_credit, (C.remaining_credit - C.available_credit) as Debt FROM Account A, Credit C WHERE A.account_number = C.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
     result = mycursor.fetchone()
     mydb.commit()
-    print(result)
+    result = list(result)
+    result[1] = round(result[1],3)
+    result[2] = round(result[2],3)
+    result = tuple(result)
     return result
 
 @sendTupleAsJSON
@@ -431,7 +432,7 @@ def getStock():
     temp = mycursor.fetchall()
     mydb.commit()
 
-    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0), COALESCE(history_profit, 0), COALESCE(Stock.live_price*Trade.no_shares, 0), COALESCE(total_spend, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name and account_number = '{temp[0][0]}' ORDER BY stock_name ASC"
+    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0), COALESCE(history_profit, 0), ROUND(COALESCE(Stock.live_price*Trade.no_shares, 0), 2), COALESCE(total_spend, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name and account_number = '{temp[0][0]}' ORDER BY stock_name ASC"
     mycursor.execute(query)
     result = mycursor.fetchall()
     mydb.commit()
@@ -471,7 +472,7 @@ def updatePosition(stock_name, no_shares, conditon):
                 return False
             add_to_total_spend = f', total_spend= total_spend + {result[0][1]}'
         if (conditon == "Sell"):
-            query3 = f"SELECT (I.amount + ({no_shares}* S.live_price)), {no_shares}* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and {no_shares} <= T.no_shares and I.account_number = '{temp[0][0]}'"
+            query3 = f"SELECT (I.amount + ({no_shares}* S.live_price)), {no_shares}* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and T.no_shares >= {no_shares} and T.account_number = I.account_number and I.account_number = '{temp[0][0]}'"
             print(query3)
             mycursor.execute(query3)
             result = mycursor.fetchall()
