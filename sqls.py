@@ -106,7 +106,7 @@ def createInvestAccount(username, amount=0):
     mycursor.execute(query)
     mydb.commit()
 
-def createCreditAccount(username, available=0, remaining=0):
+def createCreditAccount(username, available=1000, remaining=1000):
     accNo = createAccount(username)
     query = f"INSERT INTO Credit VALUES('{accNo}', '{available}', '{remaining}')"
     mycursor.execute(query)
