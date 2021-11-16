@@ -25,4 +25,4 @@ while (True):
         json_data = json.loads(stock(i))
         print(json_data["stock_name"])
         sqls.updateStock(json_data["stock_name"],json_data["live_price"],json_data["percentage_change"])
-    time.sleep(60)
+    time.sleep(6)
