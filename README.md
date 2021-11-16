@@ -56,7 +56,7 @@ you can search the transaction history by different selection option
 
 
 ### Demo
-demo video: https://drive.google.com/drive/folders/1FV2h3xu1VhOoKSIShewkzHqVLPiPJEGF
+demo video: https://drive.google.com/drive/folders/1FV2h3xu1VhOoKSIShewkzHqVLPiPJEGF<br>
 guideline for Building: https://connecthkuhk-my.sharepoint.com/personal/edmundcy_connect_hku_hk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fedmundcy%5Fconnect%5Fhku%5Fhk%2FDocuments%2FInstallation%20demo%2Emkv&parent=%2Fpersonal%2Fedmundcy%5Fconnect%5Fhku%5Fhk%2FDocuments
 
 ## Features
