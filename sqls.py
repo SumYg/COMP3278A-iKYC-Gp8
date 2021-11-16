@@ -471,9 +471,15 @@ def updatePosition(stock_name, no_shares, conditon):
                 return False
             add_to_total_spend = f', total_spend= total_spend + {result[0][1]}'
         if (conditon == "Sell"):
-            query3 = f"SELECT (I.amount + ('{no_shares}'* S.live_price)), '{no_shares}'* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and '{no_shares}' <= T.no_shares and I.account_number = '{temp[0][0]}'"
-            print(query3)
+            query3 = f"SELECT no_shares FROM Trade WHERE account_number = '{temp[0][0]}' and stock_name = '{stock_name}'"
             mycursor.execute(query3)
+            number_of_shares = mycursor.fetchall()
+            # print(number_of_shares[0][0]) debug
+            if (number_of_shares[0][0] <= 0):
+                return False
+            query4 = f"SELECT (I.amount + ('{no_shares}'* S.live_price)), '{no_shares}'* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and '{no_shares}' <= T.no_shares and I.account_number = '{temp[0][0]}'"
+            print(query4)
+            mycursor.execute(query4)
             result = mycursor.fetchall()
             mydb.commit()
             if not result:
@@ -481,12 +487,7 @@ def updatePosition(stock_name, no_shares, conditon):
 
         symbol = '+' if conditon == "Buy" else '-'
         symbol1 = '+' if conditon == "Sell" else '-'
-        query4 = f"SELECT no_shares FROM Trade WHERE account_number = '{temp[0][0]}' and stock_name = '{stock_name}'"
-        mycursor.execute(query4)
-        number_of_shares = mycursor.fetchall()
-        # print(number_of_shares[0][0]) debug
-        if (number_of_shares[0][0] <= 0):
-            return False
+       
         query5 = f"UPDATE Investment SET amount = '{result[0][0]}' WHERE account_number = '{temp[0][0]}'"
         mycursor.execute(query5)
         mydb.commit()
