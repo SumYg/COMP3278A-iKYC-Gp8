@@ -26,7 +26,7 @@ after starting the server suvessfully, you will see the following output
 ### Running React App
 5. go to the directory of the Client folder and start the react app
 ```
-COMP3278A-iKYC-Gp8-main> cd Client
+
 Client> npm start
 ```
 after starting the React App sucessfully, you will see the following output and the browser will automatically goto localhost:3000![image](https://user-images.githubusercontent.com/62173795/142026839-01d50af4-8472-4df0-aa53-34b894bf583f.png)<br>
