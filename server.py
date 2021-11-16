@@ -182,10 +182,10 @@ async def offer(request, is_register):
 
     # prepare local media
     # player = MediaPlayer(os.path.join(ROOT, "demo-instruct.wav"))
-    if args.write_audio:
-        recorder = MediaRecorder(args.write_audio)
-    else:
-        recorder = MediaBlackhole()  # 'what.mp4', options={'width': 1280, 'height':720}
+    # if args.write_audio:
+    #     recorder = MediaRecorder(args.write_audio)
+    # else:
+    recorder = MediaBlackhole()  # 'what.mp4', options={'width': 1280, 'height':720}
 
     @pc.on("datachannel")
     def on_datachannel(channel):
