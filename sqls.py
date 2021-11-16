@@ -406,7 +406,7 @@ def updateInternalAccountFromCToI(accNo, trans_amount, fromOrTo):
     print(mycursor.rowcount, "record changed.")    
 
 @getPostList
-@sendDictAsJSON    
+@sendDictAsJSON
 def internalTransFromIToC(amount):
     from_acc=getInvestAccount()[0]
     to_acc=getCreditAccount()[0]
@@ -450,7 +450,7 @@ def internalTransFromCToI(amount):
     else:
         print("you cannot input 0 or negative amount")
         return -1
-        
+
 @getPostList
 @sendDictAsJSON
 def getTransactionHistory(accNo, id, amount1, amount2, date1, date2, time1, time2, fromA, toA):
@@ -562,38 +562,40 @@ def updatePosition(stock_name, no_shares, conditon):
     mydb.commit()
 
     add_to_total_spend = ''
-    
-    if (conditon == "Buy"):
-        query2 = f"SELECT (I.amount-'{no_shares}'* S.live_price), '{no_shares}'* S.live_price from Stock S, Investment I WHERE S.stock_name = '{stock_name}' and I.account_number = '{temp[0][0]}' and I.amount >= '{no_shares}'* S.live_price"
-        mycursor.execute(query2)
-        result = mycursor.fetchall()
-        mydb.commit()
-        if not result:
-            return False
-        add_to_total_spend = f', total_spend= total_spend + {result[0][1]}'
-    if (conditon == "Sell"):
-        query3 = f"SELECT (I.amount + ('{no_shares}'* S.live_price)), '{no_shares}'* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and '{no_shares}' <= T.no_shares and I.account_number = '{temp[0][0]}'"
-        print(query3)
-        mycursor.execute(query3)
-        result = mycursor.fetchall()
-        mydb.commit()
-        if not result:
-            return False
+    if (no_shares > 0):
+        if (conditon == "Buy"):
+            query2 = f"SELECT (I.amount-'{no_shares}'* S.live_price), '{no_shares}'* S.live_price from Stock S, Investment I WHERE S.stock_name = '{stock_name}' and I.account_number = '{temp[0][0]}' and I.amount >= '{no_shares}'* S.live_price"
+            mycursor.execute(query2)
+            result = mycursor.fetchall()
+            mydb.commit()
+            if not result:
+                return False
+            add_to_total_spend = f', total_spend= total_spend + {result[0][1]}'
+        if (conditon == "Sell"):
+            query3 = f"SELECT (I.amount + ('{no_shares}'* S.live_price)), '{no_shares}'* S.live_price FROM Investment I, Trade T, Stock S  WHERE S.stock_name = '{stock_name}' and T.stock_name = '{stock_name}' and '{no_shares}' <= T.no_shares and I.account_number = '{temp[0][0]}'"
+            print(query3)
+            mycursor.execute(query3)
+            result = mycursor.fetchall()
+            mydb.commit()
+            if not result:
+                return False
 
-    symbol = '+' if conditon == "Buy" else '-'
-    symbol1 = '+' if conditon == "Sell" else '-'
-    query4 = f"UPDATE Investment SET amount = '{result[0][0]}' WHERE account_number = '{temp[0][0]}'"
-    mycursor.execute(query4)
-    mydb.commit()
-    stock_name, temp[0][0]
-    # (stock_name, account_number, no_shares, history_profit) 
-    query5 = f"INSERT INTO Trade VALUES('{stock_name}', '{temp[0][0]}', {no_shares}, -{result[0][1]}, {result[0][1]}) ON DUPLICATE KEY UPDATE no_shares= no_shares {symbol} {no_shares}, history_profit= history_profit {symbol1} {result[0][1]}{add_to_total_spend}"
-    print(query5)
-    # query5 = f"UPDATE Trade SET no_shares = no_shares {symbol} '{no_shares}' WHERE account_number = '{temp[0][0]}' AND stock_name = '{stock_name}'"
-    mycursor.execute(query5)
-    mydb.commit()
-    print(temp[0][0],"Investment account updated")
-    return True
+        symbol = '+' if conditon == "Buy" else '-'
+        symbol1 = '+' if conditon == "Sell" else '-'
+        query4 = f"UPDATE Investment SET amount = '{result[0][0]}' WHERE account_number = '{temp[0][0]}'"
+        mycursor.execute(query4)
+        mydb.commit()
+        stock_name, temp[0][0]
+        # (stock_name, account_number, no_shares, history_profit) 
+        query5 = f"INSERT INTO Trade VALUES('{stock_name}', '{temp[0][0]}', {no_shares}, -{result[0][1]}, {result[0][1]}) ON DUPLICATE KEY UPDATE no_shares= no_shares {symbol} {no_shares}, history_profit= history_profit {symbol1} {result[0][1]}{add_to_total_spend}"
+        print(query5)
+        # query5 = f"UPDATE Trade SET no_shares = no_shares {symbol} '{no_shares}' WHERE account_number = '{temp[0][0]}' AND stock_name = '{stock_name}'"
+        mycursor.execute(query5)
+        mydb.commit()
+        print(temp[0][0],"Investment account updated")
+        return True
+    else:
+        return False
 #register("hhh","111")
 #insertLoginHistory("John")
 #changePassword("John", "abcde")
