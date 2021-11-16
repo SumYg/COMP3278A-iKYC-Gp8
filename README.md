@@ -67,7 +67,7 @@ https://moodle.hku.hk/course/view.php?id=86240
 
 ## Stock Page Features
 - [x] Show details of all available stocks, such as stock code, current price
-- [x] Can buy or sell stocks
+- [x] Can buy or sell stocks using investment account
 - [x] % change:
 - [x] Total spend: Total money spent on that stock
 - [X] History Profit: Total amount that earned from that stock
