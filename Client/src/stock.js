@@ -40,13 +40,13 @@ function StocKTable(props) {
             list.push(
                 
                 <tr id={i} key={i} className="record_row">
-                    <td><div >{element[0]}</div></td>
-                    <td><div >{element[1]}</div></td>
-                    <td><div >{element[2]}</div></td>
-                    <td><div >{element[3]}</div></td>
-                    <td><div >{element[4]}</div></td>
-                    <td><div >{element[5]}</div></td>
-                    <td><div >{element[6]}</div></td>
+                    <td>{element[0]}</td>
+                    <td>{element[1]}</td>
+                    <td>{element[2]}</td>
+                    <td>{element[3]}</td>
+                    <td>{element[4]}</td>
+                    <td>{element[5]}</td>
+                    <td>{element[6]}</td>
                     <td> <Action stockName={element[0]}/></td>
                 </tr>
             )
