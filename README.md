@@ -6,7 +6,7 @@
 ```
 python -m pip install -r requirements.txt
 ```
-3. If there is error when installing one of the package in pip, you may need to install Visual C++ in [Visual Studio](https://visualstudio.microsoft.com/) first
+If there is error when installing one of the package in pip, you may need to install Visual C++ in [Visual Studio](https://visualstudio.microsoft.com/) first
 ![image](https://user-images.githubusercontent.com/61381909/142033158-60c785f4-184b-4de6-b582-78f0f8b8df4d.png)
 
 ### Connect to the database
