@@ -6,6 +6,8 @@
 ```
 python -m pip install -r requirements.txt
 ```
+If there is error when installing one of the package in pip, you may need to install Visual C++ in [Visual Studio](https://visualstudio.microsoft.com/) first
+![image](https://user-images.githubusercontent.com/61381909/142033158-60c785f4-184b-4de6-b582-78f0f8b8df4d.png)
 ### Connect to the database
 3. As we use sophia.cs.hku.hk as the host, to connect the database, please connect to the HKUVPN first (https://www.its.hku.hk/documentation/guide/network/remote/hkuvpn2fa/windows)
 ### Import database
