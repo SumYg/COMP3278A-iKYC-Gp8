@@ -5,6 +5,7 @@ import logging
 import os
 import ssl
 import uuid
+import threading
 
 from time import time
 
@@ -18,6 +19,7 @@ import aiohttp_cors
 import sqls
 
 from FaceRecognition.train import train_model, recorgn_face, initialize_face_recogn
+from stock import stock_update
 
 ROOT = os.path.dirname(__file__)
 
@@ -327,4 +329,5 @@ if __name__ == "__main__":
     for route in list(app.router.routes()):
         cors.add(route)
 
+    t = threading.Thread(target=stock_update)
     web.run_app(app, access_log=None, port=8080)
