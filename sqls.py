@@ -562,7 +562,7 @@ def updatePosition(stock_name, no_shares, conditon):
     mydb.commit()
 
     add_to_total_spend = ''
-    if (no_shares > 0):
+    if (int(no_shares) > 0):
         if (conditon == "Buy"):
             query2 = f"SELECT (I.amount-'{no_shares}'* S.live_price), '{no_shares}'* S.live_price from Stock S, Investment I WHERE S.stock_name = '{stock_name}' and I.account_number = '{temp[0][0]}' and I.amount >= '{no_shares}'* S.live_price"
             mycursor.execute(query2)
