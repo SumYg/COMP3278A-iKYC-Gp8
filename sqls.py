@@ -124,8 +124,6 @@ def getSavingAccount():
     print(result)
     return result
 
-
-
 @sendTupleAsJSON
 def getCreditAccount():
     """
@@ -135,7 +133,11 @@ def getCreditAccount():
     mycursor.execute(query)
     result = mycursor.fetchone()
     mydb.commit()
-    print(result)
+    result = list(result)
+    result[1] = round(result[1],3)
+    result[2] = round(result[2],3)
+    result = tuple(result)
+    # print(result)
     return result
 
 @sendTupleAsJSON
