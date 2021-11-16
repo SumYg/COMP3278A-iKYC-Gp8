@@ -28,7 +28,7 @@ after starting the server suvessfully, you will see the following output
 ```
 Client> npm start
 ```
-after starting the React App sucessfully, you will see the following output and the browser will automatically goto localhost:3000![image](https://user-images.githubusercontent.com/62173795/142026839-01d50af4-8472-4df0-aa53-34b894bf583f.png)<br>
+after starting the React App sucessfully, you will see the following output and the browser will automatically goto http://localhost:3000 ![image](https://user-images.githubusercontent.com/62173795/142026839-01d50af4-8472-4df0-aa53-34b894bf583f.png)<br>
 if you see the error message "'react-scripts' is not recognized as an internal or external command" when starting the React App, you mau run the below command
 ```
 npm install
