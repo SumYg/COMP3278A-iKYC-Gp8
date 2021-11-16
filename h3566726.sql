@@ -113,6 +113,16 @@ CREATE TABLE `Trade` (
   `total_spend` decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `Stock` (`stock_name`, `live_price`, `percentage_change`) VALUES
+('0005.HK', 45.8, '1.33%'),
+('0388.HK', 466, '0.17%'),
+('0700.HK', 502.5, '2.18%'),
+('AAPL', 151.26, '0.84%'),
+('BTC-USD', 60751.99, '-4.41%'),
+('ETH-USD', 4326.81, '-5.06%'),
+('FB', 342.72, '-1.39%'),
+('TSLA', 1037.34, '2.36%');
+
 -- --------------------------------------------------------
 
 --
