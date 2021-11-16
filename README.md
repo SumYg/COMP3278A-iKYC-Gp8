@@ -38,7 +38,8 @@ after starting the backend server and React App, you can goto localhost:3000 sta
 ![image](https://user-images.githubusercontent.com/62173795/142028359-28befa67-499f-4b4f-99b3-e07c229bfb5b.png)
 ### Register an account
 click the register button, input your unique username and your password, then click the button "Register your face" for registering your faceID. After clicked the button "Register your face", your device will try to open your camera and capture your face for training. Aftering training your face, you will automatically login the system<br>
-![image](https://user-images.githubusercontent.com/62173795/142029999-c8ad6156-15e4-4759-9fa0-a0aeb0ebf706.png) ![image](https://user-images.githubusercontent.com/62173795/142030205-4842a44e-1d4a-47a3-b832-516a994a9e13.png)
+![image](https://user-images.githubusercontent.com/62173795/142029999-c8ad6156-15e4-4759-9fa0-a0aeb0ebf706.png) ![image](https://user-images.githubusercontent.com/61381909/142048623-d58dbe53-1284-4254-9167-a37f2d76dc4f.png)
+
 ### Demo
 demo video:
 https://moodle.hku.hk/course/view.php?id=86240
