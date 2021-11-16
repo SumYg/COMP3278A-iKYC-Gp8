@@ -487,7 +487,7 @@ function AccountPage(props) {
     <LogoutButton />
     <div>
       <button id="saving" onClick={()=>{props.setCurrentAccount('saving');props.setMainState('transaction')}}><div className="account-details" >Saving<span >Amount: ${props.saving[1]}</span></div></button>
-      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit <span >Balance: ${props.credit[3]}</span></div></button>
+      <button id="credit" onClick={()=>{props.setCurrentAccount('credit');props.setMainState('transaction')}} ><div className="account-details" >Credit <span >Account Balance: ${-props.credit[3]}</span></div></button>
       <button id="investment" onClick={()=>{props.setCurrentAccount('invest');props.setMainState('transaction')}}><div className="account-details">Investment<span >Amount: ${props.invest[1]}</span></div></button>
     </div>
   </div>
