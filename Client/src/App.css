@@ -186,8 +186,13 @@ label {
 table{
 	border-collapse:collapse;  
 }
+
 table tr:nth-child(2n){  
     background: #c594392f;
+}
+
+table div {
+  padding: 0 0.7em;
 }
 
 #stock-table-div {
