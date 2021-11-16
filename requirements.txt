@@ -26,3 +26,4 @@ opencv-contrib-python
 Pillow
 aiohttp_cors
 simplejson
+mysql
