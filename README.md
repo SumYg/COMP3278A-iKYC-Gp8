@@ -51,7 +51,12 @@ https://moodle.hku.hk/course/view.php?id=86240
 - [x] Turn off camera after capturing enough photos to train model in the server
 - [x] Check for the existence of username and insert new user into the DB
 - [x] Redirect/Change to the Home Page after the model is trained
+- [X] Can login via both faceID or (username and password)
 - [x] Home Page
 - [x] Transaction Page
 - [x] Stock Page
+- [X]  
+- [X] Can do transaction to other users' saving account (External Transaction)
+- [X] Can do transaction to same user's other account (Internal Transaction)
+- [X] Can search the transaction history by different selection
 - [x] total_spend
