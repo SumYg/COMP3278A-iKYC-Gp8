@@ -73,7 +73,10 @@ function Action(props) {
                     alert('Updated')
                     setState('show')
                 } else {
-                    alert('Your investment account dont have enough funds!')
+                    if (condition == 'Buy')
+                        alert('Your investment account dont have enough funds!')
+                    else
+                        alert("You don't have enough shares!")
                 }
             })
             } else {
