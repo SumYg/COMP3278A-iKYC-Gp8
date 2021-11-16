@@ -94,9 +94,9 @@ def createAccount(username):
     mydb.commit()
     return accNo
 
-def createSavingAccount(username, current='HKD', amount=1000):
+def createSavingAccount(username, amount=1000):
     accNo = createAccount(username)
-    query = f"INSERT INTO Saving VALUES('{accNo}', '{current}', {amount})"
+    query = f"INSERT INTO Saving VALUES('{accNo}', {amount})"
     mycursor.execute(query)
     mydb.commit()
 
@@ -117,7 +117,7 @@ def getSavingAccount():
     """
     Return info of user.saving account
     """
-    query = f"SELECT S.account_number, S.currency, S.amount FROM Account A, Saving S WHERE A.account_number = S.account_number AND A.username = '{USER_NAME}'"
+    query = f"SELECT S.account_number, S.amount FROM Account A, Saving S WHERE A.account_number = S.account_number AND A.username = '{USER_NAME}'"
     mycursor.execute(query)
     result = mycursor.fetchone()
     mydb.commit()
