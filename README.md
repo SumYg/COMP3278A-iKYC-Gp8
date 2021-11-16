@@ -63,7 +63,7 @@ https://moodle.hku.hk/course/view.php?id=86240
 - [X] Can do transaction to other users' saving account (External Transaction)
 - [X] Can do transaction to other users' saving account (External Transaction)
 - [X] Can do transaction to same user's other account (Internal Transaction)
-- [X] Can search the transaction history by different selection
+- [X] Can search the transaction history by different selection option (can leave some selection option to be empty, or even use all the selection option)
 
 ## Stock Page Features
 - [x] total_spend
