@@ -5,7 +5,7 @@ import logging
 import os
 import ssl
 import uuid
-import threading
+import multiprocessing
 
 from time import time
 
@@ -329,5 +329,7 @@ if __name__ == "__main__":
     for route in list(app.router.routes()):
         cors.add(route)
 
-    t = threading.Thread(target=stock_update)
+    t = multiprocessing.Process(target = stock_update)
+    t.start()
     web.run_app(app, access_log=None, port=8080)
+    t.terminate()
