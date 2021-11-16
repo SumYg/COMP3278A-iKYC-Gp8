@@ -194,8 +194,8 @@ table tr:nth-child(2n){
     background: #c594392f;
 }
 
-table div {
-  padding: 0 0.7em;
+table th {
+  padding: 0 0.8em;
 }
 
 #stock-table-div {
