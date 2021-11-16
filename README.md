@@ -44,7 +44,6 @@ https://moodle.hku.hk/course/view.php?id=86240
 
 ## Features
 - [x] Login Page
-<!-- - [ ] Show camera video when using face id to login -->
 - [x] Redirect/Change to Home Page after the face of the user is recorgnised
 - [x] Register Page
 - [x] Show loading animation instead of camera capture when the server is training model
