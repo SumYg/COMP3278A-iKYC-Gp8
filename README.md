@@ -43,7 +43,7 @@ click the register button, input your unique username and your password, then cl
 after clicking the account button, you can see your saving, credit and investment account. Click any one of the account, you can see the transaction page. By clicking external in Saving account, you can transfer money to the saving accounts of other people. You can transfer money within your Saving/Investmnet/Credit account by internal transaction
 <br>![image](https://user-images.githubusercontent.com/62173795/142050098-d70f37d2-9e8b-444c-aa14-a62cb4198cbe.png) ![image](https://user-images.githubusercontent.com/62173795/142050339-5121e98c-6412-4a3f-b627-148a81e7e6f4.png) ![image](https://user-images.githubusercontent.com/62173795/142046734-469eeab5-ce6a-44a9-94bc-5149e4f03604.png)
 ### Buy/Sell stock
-in the stock page, you can view different stocks. And you can buy stock by using the money in your investment account, so please transfer money to your investment account from your saving/credit account by doing internal transaction first ;)
+in the stock page, you can view different stocks. And you can buy stock by using the money in your investment account, so please transfer money to your investment account from your saving/credit account by doing internal transaction first ;)<br>
 ![image](https://user-images.githubusercontent.com/62173795/142047289-d05eb548-f908-4c1a-986b-fabd518604c0.png)
 ![image](https://user-images.githubusercontent.com/62173795/142047449-8ab170f6-8565-40cd-9f0a-01499041a74c.png)
 ### Searching transaction history
