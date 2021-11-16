@@ -71,4 +71,4 @@ https://moodle.hku.hk/course/view.php?id=86240
 - [x] % change: The percentage change between current price and closing price
 - [x] Total spend: Total money spent on that stock
 - [X] History Profit: Total amount that earned from that stock
-- [X] Current Value: Current value of all owned stock
+- [X] Current Value: Current value of all owned shares
