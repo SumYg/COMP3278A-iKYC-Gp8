@@ -73,7 +73,7 @@ function Action(props) {
                     alert('Updated')
                     setState('show')
                 } else {
-                    alert('Please check your input')
+                    alert('Your investment account dont have enough funds!')
                 }
             })
             } else {
