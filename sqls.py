@@ -431,7 +431,7 @@ def getStock():
     temp = mycursor.fetchall()
     mydb.commit()
 
-    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0), COALESCE(history_profit, 0), COALESCE(Stock.live_price*Trade.no_shares, 0), COALESCE(total_spend, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name and account_number = '{temp[0][0]}' ORDER BY stock_name ASC"
+    query = f"SELECT Stock.stock_name, Stock.live_price, Stock.percentage_change, COALESCE(Trade.no_shares, 0), COALESCE(history_profit, 0), ROUND(COALESCE(Stock.live_price*Trade.no_shares, 0), 2), COALESCE(total_spend, 0) FROM Stock LEFT outer JOIN Trade ON Trade.stock_name = Stock.stock_name and account_number = '{temp[0][0]}' ORDER BY stock_name ASC"
     mycursor.execute(query)
     result = mycursor.fetchall()
     mydb.commit()
