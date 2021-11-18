@@ -4,7 +4,7 @@ import sqls
 import time;
 #symbol = stock symbol EX: "TSLA" or "0388.HK"
 def stock(symbol):
-    data = yf.download(symbol,period='2d',time='1m')
+    data = yf.download(symbol,period='3d',time='1m')
     price_date = data[['Close']]
     price_date_dict = price_date.to_dict(orient='list')
     price_date_list = price_date_dict.get('Close')
